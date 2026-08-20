@@ -1,0 +1,25 @@
+# Never commit configs, tech support files, or reports derived from them.
+*.xml
+*.tgz
+*.tar.gz
+*.gz
+*.zip
+bpa-*.json
+bpa-*.html
+bpa-*.csv
+api-bpa_*.json
+reports/
+out/
+
+# Secrets / env
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Session brief
+CLAUDE.md
