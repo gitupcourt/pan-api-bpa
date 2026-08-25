@@ -45,6 +45,16 @@ open-pan-bpa's report template, and the output is verified byte-for-byte
 against the binary's renderer (see [VENDORED.md](VENDORED.md)) — same
 report, either tool, provably.
 
+**Prefer one binary instead?** open-pan-bpa v0.5.0+ ships the same hosted-API
+flow built in as `bpa api-scan` (a separate, explicitly-online subcommand;
+`bpa scan` stays fully offline). Pick whichever trust posture fits:
+
+| | Engine | Runs as |
+|---|---|---|
+| `bpa scan` | open-pan-bpa, offline | binary |
+| `bpa api-scan` | Palo Alto Networks' hosted engine | binary |
+| `pan_api_bpa.py` (this tool) | Palo Alto Networks' hosted engine | auditable Python |
+
 ## Setup
 
 ```
