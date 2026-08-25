@@ -1,9 +1,10 @@
 # pan-api-bpa
 
 Drive **Palo Alto Networks' official Best Practice Assessment (BPA) API**
-against a PAN-OS config or tech support file, then present the results
-through [open-pan-bpa](https://github.com/gitupcourt/open-pan-bpa)'s
-renderer — so API-based and offline assessments produce identical HTML/CSV
+against a PAN-OS config or tech support file, and present the results in
+[open-pan-bpa](https://github.com/gitupcourt/open-pan-bpa)'s report format —
+rendered **by this script alone**, with no dependency on that project's
+binary — so API-based and offline assessments produce identical HTML/CSV
 output. The assessment itself is performed by Palo Alto Networks' hosted
 engine; this script automates the submission and parses its report.
 
@@ -121,9 +122,10 @@ Nothing here is invented:
   disabled rules and predefined read-only objects downgrade to `note`
   (disable with `--no-corrections`).
 - Check identity: API check IDs are mapped to open-pan-bpa slugs through the
-  catalog's `pan_bpa_ids` cross-references (`bpa catalog`, fetched at
-  runtime — nothing vendored). Unmapped checks pass through as
-  `pan-api-<id>` with their API titles, so nothing is dropped.
+  vendored `catalog.json`'s `pan_bpa_ids` cross-references (see
+  [VENDORED.md](VENDORED.md); optional — without it, checks keep the API's
+  own identities). Unmapped checks pass through as `pan-api-<id>` with their
+  API titles, so nothing is dropped.
 - **Check IDs are registry-specific.** Never cross-reference by ID between
   runs; the slug is the identity.
 
