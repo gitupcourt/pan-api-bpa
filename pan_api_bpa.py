@@ -312,7 +312,11 @@ def convert(api, catalog, hostname, input_path, corrections=True):
                     "section": section,
                     "feature": feature,
                     "name": cfg.get("name") or "",
-                    "location": cfg.get("location") or "",
+                    # Panorama device-scope wrappers attribute via
+                    # template_name (one wrapper per template/stack), not
+                    # location — without the fallback, ~99 instances of every
+                    # device check collapse into one blank location.
+                    "location": cfg.get("location") or cfg.get("template_name") or "",
                 }
                 uuid = cfg.get("rule_uuid") or cfg.get("uuid") or ""
                 if uuid:
