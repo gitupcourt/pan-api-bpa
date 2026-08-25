@@ -297,6 +297,7 @@ def convert(api, catalog, hostname, input_path, corrections=True):
     by_id = catalog["by_id"]
     mapped = unmapped = 0
 
+    is_panorama = ((api.get("information") or {}).get("platform") or "").lower() == "panorama"
     bp = api.get("best_practices") or {}
     for section, feats in bp.items():
         if not isinstance(feats, dict):
@@ -318,6 +319,11 @@ def convert(api, catalog, hostname, input_path, corrections=True):
                     # device check collapse into one blank location.
                     "location": cfg.get("location") or cfg.get("template_name") or "",
                 }
+                # What remains blank on a Panorama input is Panorama's own
+                # device scope — name it so its posture stands as a
+                # first-class row next to the template stacks.
+                if not obj["location"] and section == "device" and is_panorama:
+                    obj["location"] = "Panorama-local"
                 uuid = cfg.get("rule_uuid") or cfg.get("uuid") or ""
                 if uuid:
                     obj["uuid"] = uuid
