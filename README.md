@@ -60,8 +60,17 @@ flow built in as `bpa api-scan` (a separate, explicitly-online subcommand;
 
 **Get the whole folder, not just the script.** The tool is three files that
 travel together — `pan_api_bpa.py` plus its vendored companions
-`template.html` (the report template) and `catalog.json` (the check
-catalog), which are resolved **next to the script**, wherever it lives:
+`template.html` and `catalog.json`, which are resolved **next to the
+script**, wherever it lives.
+
+*Why the extra two files?* They exist purely to make this tool's output
+match [open-pan-bpa](https://github.com/gitupcourt/open-pan-bpa)'s —
+`template.html` is that project's report template (so the HTML is
+byte-identical), and `catalog.json` maps the API's unstable check IDs onto
+its stable check identities and documentation references (so API-based and
+offline reports are directly comparable, check by check). A standalone
+API client doesn't strictly need either — but then its reports would look
+like something else entirely, which defeats the continuity goal.
 
 ```
 git clone https://github.com/gitupcourt/pan-api-bpa
