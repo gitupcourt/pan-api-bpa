@@ -1,0 +1,2682 @@
+{
+  "schema_version": "0.1.0",
+  "tool_version": "dev",
+  "packs": [
+    {
+      "pack": "advanced-ip-defense",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "rb-aid-c2-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from C2 infrastructure IPs",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the C2 list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            398
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: C2"
+            ],
+            "list_label": "C2 infrastructure"
+          }
+        },
+        {
+          "slug": "rb-aid-c2-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to C2 infrastructure IPs",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the C2 list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            399
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: C2"
+            ],
+            "list_label": "C2 infrastructure"
+          }
+        },
+        {
+          "slug": "rb-aid-malware-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from IPs hardcoded in malware",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the hardcoded-in-malware list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            400
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: Hardcoded in Malware"
+            ],
+            "list_label": "hardcoded-in-malware"
+          }
+        },
+        {
+          "slug": "rb-aid-malware-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to IPs hardcoded in malware",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the hardcoded-in-malware list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            401
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: Hardcoded in Malware"
+            ],
+            "list_label": "hardcoded-in-malware"
+          }
+        },
+        {
+          "slug": "rb-aid-vpn-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from commercial VPN IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the VPN list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            402
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: VPN"
+            ],
+            "list_label": "commercial VPN"
+          }
+        },
+        {
+          "slug": "rb-aid-vpn-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to commercial VPN IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the VPN list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            403
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: VPN"
+            ],
+            "list_label": "commercial VPN"
+          }
+        },
+        {
+          "slug": "rb-aid-proxy-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from proxy-service IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the proxies list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            404
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: Proxies"
+            ],
+            "list_label": "proxy services"
+          }
+        },
+        {
+          "slug": "rb-aid-proxy-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to proxy-service IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the proxies list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            405
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: Proxies"
+            ],
+            "list_label": "proxy services"
+          }
+        },
+        {
+          "slug": "rb-aid-scanner-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from scanner/brute-force IPs",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the scanner list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            406
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: Scanner and Brute-force"
+            ],
+            "list_label": "scanner and brute-force"
+          }
+        },
+        {
+          "slug": "rb-aid-scanner-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to scanner/brute-force IPs",
+          "severity": "high",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the scanner list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            407
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: Scanner and Brute-force"
+            ],
+            "list_label": "scanner and brute-force"
+          }
+        },
+        {
+          "slug": "rb-aid-vulnsvc-inbound",
+          "title": "Advanced IP Defense: block inbound traffic from exposed vulnerable-service IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the exposed-vulnerable-services list as source (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            408
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "Advanced IP Defense: Exposed Vulnerable Services"
+            ],
+            "list_label": "exposed vulnerable services"
+          }
+        },
+        {
+          "slug": "rb-aid-vulnsvc-outbound",
+          "title": "Advanced IP Defense: block outbound traffic to exposed vulnerable-service IPs",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_aid_edl_block",
+          "rationale": "IPs hosting command-and-control services or bound to C2 domains; requires the Advanced IP Defense subscription.",
+          "remediation": "Add a deny rule using the exposed-vulnerable-services list as destination (license required).",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-ip-defense/getting-started/advanced-ip-defense-predefined-edls"
+          ],
+          "pan_bpa_ids": [
+            409
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "Advanced IP Defense: Exposed Vulnerable Services"
+            ],
+            "list_label": "exposed vulnerable services"
+          }
+        }
+      ]
+    },
+    {
+      "pack": "core",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "rule-description",
+          "title": "Security rules should have a description",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_description",
+          "rationale": "A rule without a stated purpose cannot be safely audited, tuned, or retired later; the description is where that intent lives.",
+          "remediation": "Populate the Description field on each rule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/security-policy-best-practices"
+          ],
+          "pan_bpa_ids": [
+            3
+          ]
+        },
+        {
+          "slug": "rule-service-specific",
+          "title": "Allow rules should not use service \"any\"",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_service_specific",
+          "rationale": "Restricting service ports limits where traffic can flow before App-ID identifies the application; \"any\" leaves every port open to evasive applications. Prefer application-default.",
+          "remediation": "Set Service to application-default or an explicit service object.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy"
+          ],
+          "pan_bpa_ids": [
+            5
+          ]
+        },
+        {
+          "slug": "rule-no-any-any-allow",
+          "title": "Allow rules should not match any source and any destination",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_no_any_any_allow",
+          "rationale": "An allow rule with unscoped source and destination admits traffic no one intended and defeats segmentation.",
+          "remediation": "Scope the rule's source and/or destination zones and addresses.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy"
+          ],
+          "pan_bpa_ids": [
+            4
+          ]
+        },
+        {
+          "slug": "rule-log-end",
+          "title": "Log at Session End should be enabled on security rules",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_log_end",
+          "rationale": "Without session-end logging there is no record of traffic the rule matched, blinding investigation and tuning.",
+          "remediation": "Enable Log at Session End on the rule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/security-policy-best-practices"
+          ]
+        },
+        {
+          "slug": "rule-log-start",
+          "title": "Log at Session Start should not be enabled on security rules",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_log_start",
+          "rationale": "Session-start logging doubles volume for the same sessions, and the start record carries the coarse pre-refinement App-ID. The legitimate exception is known long-lived sessions that never end within an observation window (OT and mainframe-era flows) — which the ot-mode pack variant will treat as correct rather than a finding.",
+          "remediation": "Disable Log at Session Start except on documented long-lived-session rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/security-policy-best-practices"
+          ],
+          "pan_bpa_ids": [
+            6
+          ]
+        },
+        {
+          "slug": "rule-log-forwarding",
+          "title": "A Log Forwarding profile should be attached to security rules",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_log_forwarding",
+          "rationale": "On-box log storage is small and rotates; forwarding preserves logs for retention and correlation.",
+          "remediation": "Attach a Log Forwarding profile (name it \"default\" to auto-attach on new rules).",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/security-policy-best-practices"
+          ],
+          "pan_bpa_ids": [
+            7
+          ]
+        },
+        {
+          "slug": "rule-profiles-attached",
+          "title": "Security profiles should be attached to allow rules",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rule",
+          "evaluator": "rule_profiles_attached",
+          "rationale": "An allow rule without Antivirus, Anti-Spyware, and Vulnerability Protection passes traffic with zero threat inspection. A profile-group attachment only counts if the group actually contains those profiles.",
+          "remediation": "Attach a security profile group containing at least Antivirus, Anti-Spyware, and Vulnerability Protection to every allow rule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ]
+        },
+        {
+          "slug": "profile-group-default-exists",
+          "title": "A security profile group named \"default\" should exist",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "profile_group",
+          "evaluator": "profile_group_default",
+          "rationale": "PAN-OS automatically attaches a profile group named exactly \"default\" to new security rules; without one, new rules ship with no inspection.",
+          "remediation": "Create a hardened profile group named \"default\".",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ]
+        },
+        {
+          "slug": "zone-protection-attached",
+          "title": "Zones with interfaces should have a Zone Protection profile",
+          "severity": "warning",
+          "section": "network",
+          "feature": "zone",
+          "evaluator": "zone_protection_profile",
+          "rationale": "Zone Protection provides flood, reconnaissance, and packet-based attack defense at the zone edge; a zone without it is unshielded.",
+          "remediation": "Attach a Zone Protection profile to every in-service zone.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/dos-and-zone-protection-best-practices"
+          ],
+          "pan_bpa_ids": [
+            60
+          ]
+        },
+        {
+          "slug": "ntp-redundant",
+          "title": "Primary and secondary NTP servers should be configured",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_services",
+          "evaluator": "ntp_redundant",
+          "rationale": "Accurate, redundant time sources underpin log correlation, certificate validation, and scheduled content updates.",
+          "remediation": "Configure both a primary and a secondary NTP server.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            105
+          ]
+        },
+        {
+          "slug": "license-expiry",
+          "title": "Licenses should not be expired or near expiry",
+          "severity": "high",
+          "section": "device",
+          "feature": "licenses",
+          "evaluator": "license_expiry",
+          "rationale": "An expired subscription silently stops its protections and content updates — the firewall keeps passing traffic while inspection quality decays. Expiry inside the warning window needs renewal action now.",
+          "remediation": "Renew expired and soon-to-expire licenses, or deliberately retire the dependency on the lapsed feature. Requires a tech support file as input (license state is not part of the configuration XML).",
+          "references": [
+            "https://docs.paloaltonetworks.com/ngfw/getting-started/ngfw-compatible-subscriptions/activate-subscription-licenses"
+          ],
+          "params": {
+            "warn_days": 90
+          }
+        },
+        {
+          "slug": "password-complexity",
+          "title": "Minimum password complexity should be enforced for local accounts",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_minimum_password_complexity",
+          "evaluator": "password_complexity",
+          "rationale": "Local administrator accounts (even backup-only ones) need enforced complexity; enabling the feature with zeroed character-class minimums is not enforcement.",
+          "remediation": "Enable Minimum Password Complexity and set minimum length and at least one required character of each class, plus username-inclusion blocking.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            103
+          ],
+          "params": {
+            "min_length": 12
+          }
+        }
+      ]
+    },
+    {
+      "pack": "decryption",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "dp-forward-proxy-blocks",
+          "title": "SSL Forward Proxy protections should all be enabled (Strip ALPN off)",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_forward_proxy",
+          "rationale": "Each disabled forward-proxy block setting (expired certs, untrusted issuers, unknown status, unsupported modes, resource exhaustion) is a session class that proceeds without verification; Strip ALPN stays off so HTTP/2 remains decryptable.",
+          "remediation": "Enable every block/verify option in SSL Forward Proxy; leave Strip ALPN disabled.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            55
+          ]
+        },
+        {
+          "slug": "dp-inbound-inspection-blocks",
+          "title": "SSL Inbound Inspection protections should all be enabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_inbound_inspection",
+          "rationale": "Inbound inspection without unsupported-mode and resource blocking lets exactly the abnormal sessions most worth inspecting bypass it.",
+          "remediation": "Enable every block option under SSL Inbound Inspection.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            56
+          ]
+        },
+        {
+          "slug": "dp-tls-min-version",
+          "title": "Decryption profiles should require TLS 1.2 or higher",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_tls_versions",
+          "rationale": "A TLS 1.2 floor automatically excludes downgrade paths onto broken protocol versions and their cipher suites.",
+          "remediation": "Set Min Version to TLSv1.2 (Max Version max).",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            57
+          ]
+        },
+        {
+          "slug": "dp-no-decrypt-expired",
+          "title": "No-decrypt traffic should block expired certificates",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_no_decrypt_expired",
+          "rationale": "Traffic you choose not to decrypt still deserves certificate hygiene; an expired certificate on an opaque session is a red flag with no compensating visibility.",
+          "remediation": "Enable Block sessions with expired certificates under No Decryption.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            58
+          ]
+        },
+        {
+          "slug": "dp-no-decrypt-untrusted",
+          "title": "No-decrypt traffic should block untrusted issuers",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_no_decrypt_untrust",
+          "rationale": "An untrusted issuer on a session you will not decrypt means no layer ever verifies that endpoint.",
+          "remediation": "Enable Block sessions with untrusted issuers under No Decryption.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            373
+          ]
+        },
+        {
+          "slug": "dp-ssh-proxy-blocks",
+          "title": "SSH Proxy unsupported-mode protections should be enabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_ssh_proxy",
+          "rationale": "SSH Proxy without error/unsupported-mode blocking allows sessions the proxy cannot inspect — including tunneled port forwarding — to proceed.",
+          "remediation": "Enable all SSH Proxy block options.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            59
+          ]
+        },
+        {
+          "slug": "dp-encryption-algorithms",
+          "title": "Deprecated TLS encryption algorithms should be disabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_encryption_algos",
+          "rationale": "3DES, RC4, and CBC-mode/128-bit AES fall short of the quantum-safe posture; AES-256-GCM and CHACHA20-POLY1305 are the surviving set.",
+          "remediation": "Disable 3DES, RC4, AES-128-CBC, AES-256-CBC, and AES-128-GCM.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            371
+          ]
+        },
+        {
+          "slug": "dp-auth-algorithms",
+          "title": "Deprecated TLS authentication algorithms should be disabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_auth_algos",
+          "rationale": "SHA-1 (and MD5) handshake integrity is collision-broken; require SHA-256+.",
+          "remediation": "Disable SHA1 and MD5 authentication algorithms.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            372
+          ]
+        },
+        {
+          "slug": "dp-pqc-key-exchange",
+          "title": "Post-quantum key exchange should be enabled",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "decryption_profile",
+          "evaluator": "dp_pqc_key_exchange",
+          "rationale": "Harvest-now-decrypt-later makes classical-only key exchange a standing liability; PQC hybrid key exchange closes it where supported.",
+          "remediation": "Enable PQC Standardized (or Experimental) key exchange in SSL Protocol Settings.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            375
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "device-setup",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "dev-cert-expiration-check",
+          "title": "Certificate expiration checking should be enabled",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_general",
+          "evaluator": "dev_cert_expiration_check",
+          "rationale": "Expired device certificates should warn ahead of time, not fail silently mid-outage.",
+          "remediation": "Enable certificate expiration checking (Device \u003e Setup \u003e Management).",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            89
+          ]
+        },
+        {
+          "slug": "dev-unique-hostname",
+          "title": "The device should have a unique hostname",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_general",
+          "evaluator": "dev_unique_hostname",
+          "rationale": "Default hostnames make logs, alerts, and HA pairs unattributable.",
+          "remediation": "Set a unique hostname.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            90
+          ]
+        },
+        {
+          "slug": "dev-login-banner",
+          "title": "A login banner should be configured",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_general",
+          "evaluator": "dev_login_banner",
+          "rationale": "Unauthorized-access warnings at login carry legal weight.",
+          "remediation": "Configure a login banner.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            91
+          ]
+        },
+        {
+          "slug": "dev-wildfire-regional-cloud",
+          "title": "WildFire should forward samples to a regional cloud",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_general",
+          "evaluator": "dev_wildfire_cloud",
+          "rationale": "Regional clouds keep samples in-jurisdiction and shorten verdict round-trips.",
+          "remediation": "Point WildFire at the regional cloud matching the device's geography.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-wildfire"
+          ],
+          "pan_bpa_ids": [
+            119
+          ]
+        },
+        {
+          "slug": "dev-external-auth-profile",
+          "title": "Administrator authentication should use an external Authentication profile",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_authentication",
+          "evaluator": "dev_auth_profile",
+          "rationale": "Central authentication gives lockout, MFA, and audit in one place; local-only accounts scatter all three.",
+          "remediation": "Set an Authentication profile under Authentication Settings.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            92
+          ]
+        },
+        {
+          "slug": "dev-idle-timeout",
+          "title": "Admin idle timeout should be set and modest",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_authentication",
+          "evaluator": "dev_idle_timeout",
+          "rationale": "An unattended management session is an open console.",
+          "remediation": "Set the idle timeout to 10 minutes or less.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            94
+          ],
+          "params": {
+            "max_minutes": 10
+          }
+        },
+        {
+          "slug": "dev-failed-attempts",
+          "title": "Failed login attempts should be limited to five or fewer",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_authentication",
+          "evaluator": "dev_failed_attempts",
+          "rationale": "Unlimited attempts invite brute force; five tolerates typos.",
+          "remediation": "Set Failed Attempts between 1 and 5.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            95
+          ]
+        },
+        {
+          "slug": "dev-lockout-time",
+          "title": "Admin lockout time should be at least 30 minutes",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_authentication",
+          "evaluator": "dev_lockout_time",
+          "rationale": "Short lockouts just pace a brute-force tool.",
+          "remediation": "Set Lockout Time to 30 minutes or more.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            96
+          ]
+        },
+        {
+          "slug": "dev-api-key-lifetime",
+          "title": "API keys should expire",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_authentication",
+          "evaluator": "dev_api_key_lifetime",
+          "rationale": "A leaked never-expiring key is permanent access.",
+          "remediation": "Set an API Key Lifetime.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            243
+          ]
+        },
+        {
+          "slug": "dev-permitted-ip",
+          "title": "Management access should be restricted by Permitted IP Addresses",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_management_interface",
+          "evaluator": "dev_permitted_ip",
+          "rationale": "An unrestricted management plane is reachable by anything that can route to it.",
+          "remediation": "Populate the Permitted IP Addresses list with management networks.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            100
+          ]
+        },
+        {
+          "slug": "dev-permitted-ip-scoped",
+          "title": "The Permitted IP list should not contain any-source entries",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_management_interface",
+          "evaluator": "dev_permitted_ip_broad",
+          "rationale": "A 0.0.0.0/0 entry recreates unrestricted access while looking configured.",
+          "remediation": "Replace any-source entries with specific management networks.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            101
+          ]
+        },
+        {
+          "slug": "dev-mgmt-encrypted-only",
+          "title": "Management services should be encrypted only (no HTTP/Telnet)",
+          "severity": "critical",
+          "section": "device",
+          "feature": "device_setup_management_interface",
+          "evaluator": "dev_mgmt_encrypted_only",
+          "rationale": "Cleartext management exposes credentials to anything on the path.",
+          "remediation": "Keep HTTP and Telnet disabled; use HTTPS and SSH.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            102
+          ]
+        },
+        {
+          "slug": "dev-update-server-verify",
+          "title": "Update server identity verification should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_services",
+          "evaluator": "dev_update_server_verify",
+          "rationale": "Unverified update servers invite content-update spoofing.",
+          "remediation": "Enable Verify Update Server Identity.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            104
+          ]
+        },
+        {
+          "slug": "dev-fqdn-refresh",
+          "title": "FQDN refresh time should be 30 seconds or less",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_services",
+          "evaluator": "dev_fqdn_refresh",
+          "rationale": "Slow FQDN refresh leaves policy pointing at stale addresses.",
+          "remediation": "Set Minimum FQDN Refresh Time to 30 seconds or less.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            245
+          ]
+        },
+        {
+          "slug": "dev-session-rematch",
+          "title": "Session rematch on policy commit should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_session",
+          "evaluator": "dev_rematch",
+          "rationale": "Without rematch, sessions started before a policy tightening keep their old permissions.",
+          "remediation": "Enable Rematch Sessions.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            120
+          ]
+        },
+        {
+          "slug": "dev-accelerated-aging",
+          "title": "Accelerated session aging should be enabled",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_session",
+          "evaluator": "dev_accel_aging",
+          "rationale": "Aging idle sessions faster under pressure protects the session table.",
+          "remediation": "Enable Accelerated Aging.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            121
+          ]
+        },
+        {
+          "slug": "dev-packet-buffer-protection",
+          "title": "Global Packet Buffer Protection should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_session",
+          "evaluator": "dev_packet_buffer",
+          "rationale": "Packet-buffer exhaustion degrades every zone at once; the global guard is the backstop.",
+          "remediation": "Enable Packet Buffer Protection in Session Settings.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/dos-and-zone-protection-best-practices"
+          ],
+          "pan_bpa_ids": [
+            213
+          ]
+        },
+        {
+          "slug": "dev-tcp-ooo-forwarding",
+          "title": "Forwarding segments exceeding the TCP out-of-order queue should be disabled",
+          "severity": "critical",
+          "section": "device",
+          "feature": "device_setup_session",
+          "evaluator": "dev_tcp_ooo_queue",
+          "rationale": "Forwarded overflow segments bypass inspection — a classic evasion channel.",
+          "remediation": "Do not forward segments exceeding the out-of-order queue.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention/getting-started/best-practices-for-securing-your-network-from-layer-4-and-layer-7-evasions"
+          ],
+          "pan_bpa_ids": [
+            214
+          ]
+        },
+        {
+          "slug": "dev-tcp-inspection-queue",
+          "title": "Forwarding segments exceeding the TCP content-inspection queue should be disabled",
+          "severity": "critical",
+          "section": "device",
+          "feature": "device_setup_content_id",
+          "evaluator": "dev_tcp_ctd_queue",
+          "rationale": "Same evasion channel, content-inspection stage.",
+          "remediation": "Do not forward segments exceeding the TCP content-inspection queue.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention/getting-started/best-practices-for-securing-your-network-from-layer-4-and-layer-7-evasions"
+          ],
+          "pan_bpa_ids": [
+            215
+          ]
+        },
+        {
+          "slug": "dev-udp-inspection-queue",
+          "title": "Forwarding datagrams exceeding the UDP content-inspection queue should be disabled",
+          "severity": "critical",
+          "section": "device",
+          "feature": "device_setup_content_id",
+          "evaluator": "dev_udp_ctd_queue",
+          "rationale": "Same evasion channel, UDP.",
+          "remediation": "Do not forward datagrams exceeding the UDP content-inspection queue.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention/getting-started/best-practices-for-securing-your-network-from-layer-4-and-layer-7-evasions"
+          ],
+          "pan_bpa_ids": [
+            216
+          ]
+        },
+        {
+          "slug": "dev-appid-inspection-queue",
+          "title": "Forwarding segments exceeding the App-ID inspection queue should be disabled",
+          "severity": "critical",
+          "section": "device",
+          "feature": "device_setup_content_id",
+          "evaluator": "dev_appid_queue",
+          "rationale": "Overflow segments skipping App-ID arrive unidentified and unpoliced.",
+          "remediation": "Do not forward segments exceeding the App-ID inspection queue.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention/getting-started/best-practices-for-securing-your-network-from-layer-4-and-layer-7-evasions"
+          ],
+          "pan_bpa_ids": [
+            217
+          ]
+        },
+        {
+          "slug": "dev-xff-user-id",
+          "title": "X-Forwarded-For should feed User-ID",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_content_id",
+          "evaluator": "dev_xff_user_id",
+          "rationale": "Without XFF extraction, users behind downstream proxies are one shared IP.",
+          "remediation": "Enable Use X-Forwarded-For in Content-ID settings.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            107
+          ]
+        },
+        {
+          "slug": "dev-strip-xff",
+          "title": "X-Forwarded-For headers should be stripped outbound",
+          "severity": "warning",
+          "section": "device",
+          "feature": "device_setup_content_id",
+          "evaluator": "dev_strip_xff",
+          "rationale": "Forwarded XFF leaks internal client addressing to external servers.",
+          "remediation": "Enable Strip X-Forwarded-For in Content-ID settings.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            108
+          ]
+        },
+        {
+          "slug": "dev-rule-hit-count",
+          "title": "Policy rule hit counting should be enabled",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_policy_rulebase",
+          "evaluator": "dev_hit_count",
+          "rationale": "Unused-rule cleanup needs hit-count evidence.",
+          "remediation": "Keep Policy Rule Hit Count enabled.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            242
+          ]
+        },
+        {
+          "slug": "dev-log-high-dp-load",
+          "title": "High dataplane load should generate a system log",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_logging_reporting",
+          "evaluator": "dev_log_high_dp",
+          "rationale": "A 100%-load event with no log is a capacity incident you find out about from users.",
+          "remediation": "Enable high dataplane load logging.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            97
+          ]
+        },
+        {
+          "slug": "dev-telemetry-sharing",
+          "title": "Device telemetry sharing should not be fully disabled",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_telemetry",
+          "evaluator": "dev_telemetry",
+          "rationale": "Telemetry feeds the threat-intelligence loop the subscriptions rely on.",
+          "remediation": "Enable at least threat-prevention telemetry.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            197
+          ]
+        },
+        {
+          "slug": "dev-secure-conn-custom-certs",
+          "title": "Secure client communication should use custom certificates",
+          "severity": "informational",
+          "section": "device",
+          "feature": "device_setup_secure_communication",
+          "evaluator": "dev_secure_conn",
+          "rationale": "Predefined management-channel certificates are shared knowledge; custom ones aren't.",
+          "remediation": "Deploy custom certificates for secure client communication.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            223
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "network-ha",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "ha-config-sync",
+          "title": "HA configuration synchronization should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_config_sync",
+          "rationale": "Unsynced peers drift until failover surprises you.",
+          "remediation": "Enable configuration synchronization.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            136
+          ]
+        },
+        {
+          "slug": "ha-backup-links",
+          "title": "An HA1 backup path should be configured",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_backup_links",
+          "rationale": "A single control link is a split-brain waiting to happen.",
+          "remediation": "Configure HA1 backup or a backup peer IP.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            138
+          ]
+        },
+        {
+          "slug": "ha-passive-link-auto",
+          "title": "Passive link state should be Auto",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_passive_link",
+          "rationale": "Auto keeps passive links up and skips link negotiation on failover.",
+          "remediation": "Set Passive Link State to auto.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            139
+          ]
+        },
+        {
+          "slug": "ha-heartbeat-backup",
+          "title": "Heartbeat backup should cover in-band HA1 links",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_heartbeat",
+          "rationale": "In-band HA1 plus in-band backup dies with the dataplane; heartbeat backup rides the management plane.",
+          "remediation": "Enable Heartbeat Backup.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            141
+          ]
+        },
+        {
+          "slug": "ha-timers-recommended",
+          "title": "HA timers should be set to Recommended",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_timers",
+          "rationale": "Vendor-vetted timers balance detection speed against flapping.",
+          "remediation": "Set Election Timers to Recommended.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            142
+          ]
+        },
+        {
+          "slug": "ha-ha1-encryption",
+          "title": "HA1 communications should be encrypted",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_ha1_encryption",
+          "rationale": "Config and session sync cross HA1 in cleartext otherwise.",
+          "remediation": "Enable HA1 encryption.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            143
+          ]
+        },
+        {
+          "slug": "ha-session-sync",
+          "title": "HA2 session synchronization should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_state_sync",
+          "rationale": "Without it every failover drops every session.",
+          "remediation": "Enable session synchronization.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            144
+          ]
+        },
+        {
+          "slug": "ha-ha2-keepalive",
+          "title": "HA2 keep-alive should be enabled",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_ha2_keepalive",
+          "rationale": "A dead session-sync path should announce itself before failover.",
+          "remediation": "Enable HA2 keep-alive.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            145
+          ]
+        },
+        {
+          "slug": "ha-aa-ha3",
+          "title": "Active/Active HA should configure HA3",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_aa_ha3",
+          "rationale": "Asymmetric flows need HA3 packet forwarding between peers.",
+          "remediation": "Configure the HA3 interface.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            147
+          ]
+        },
+        {
+          "slug": "ha-aa-session-owner",
+          "title": "Active/Active session owner should be First Packet",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_aa_session_owner",
+          "rationale": "First-packet ownership avoids cross-peer inspection hops.",
+          "remediation": "Set Session Owner Selection to First Packet.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            148
+          ]
+        },
+        {
+          "slug": "ha-monitoring",
+          "title": "HA link or path monitoring should be enabled",
+          "severity": "warning",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_monitoring",
+          "rationale": "A pair that can't detect failures can't fail over on them.",
+          "remediation": "Enable link and/or path monitoring.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            149
+          ]
+        },
+        {
+          "slug": "ha-link-group",
+          "title": "Enabled link monitoring needs a link group",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_link_group",
+          "rationale": "Monitoring without members monitors nothing.",
+          "remediation": "Define a link group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            150
+          ]
+        },
+        {
+          "slug": "ha-path-group",
+          "title": "Enabled path monitoring needs a path group",
+          "severity": "informational",
+          "section": "device",
+          "feature": "high_availability",
+          "evaluator": "ha_path_group",
+          "rationale": "Monitoring without members monitors nothing.",
+          "remediation": "Define a path group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            151
+          ]
+        },
+        {
+          "slug": "zpp-recon-protection",
+          "title": "Zone Protection profiles should enable reconnaissance protection",
+          "severity": "warning",
+          "section": "network",
+          "feature": "zone_protection_profile",
+          "evaluator": "zpp_recon",
+          "rationale": "Scans and sweeps are the pre-attack survey; throttle and log them.",
+          "remediation": "Configure Reconnaissance Protection.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/dos-and-zone-protection-best-practices"
+          ],
+          "pan_bpa_ids": [
+            86
+          ]
+        },
+        {
+          "slug": "zpp-packet-attack",
+          "title": "Zone Protection profiles should enable packet-based attack protections",
+          "severity": "warning",
+          "section": "network",
+          "feature": "zone_protection_profile",
+          "evaluator": "zpp_packet_attack",
+          "rationale": "Malformed options and overlapping-segment games are evasion staples.",
+          "remediation": "Enable malformed-option discard",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/dos-and-zone-protection-best-practices"
+          ],
+          "pan_bpa_ids": [
+            87
+          ]
+        },
+        {
+          "slug": "ifmgmt-encrypted-only",
+          "title": "Interface management profiles should not permit HTTP/Telnet",
+          "severity": "critical",
+          "section": "network",
+          "feature": "interface_management_profile",
+          "evaluator": "ifmgmt_encrypted",
+          "rationale": "Dataplane management access deserves the same encryption floor as the management port.",
+          "remediation": "Remove HTTP and Telnet from the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            228
+          ]
+        },
+        {
+          "slug": "zone-packet-buffer",
+          "title": "Per-zone packet buffer protection should stay enabled",
+          "severity": "informational",
+          "section": "network",
+          "feature": "zone",
+          "evaluator": "zone_pbp",
+          "rationale": "A zone with buffer protection off can exhaust shared buffers for everyone.",
+          "remediation": "Re-enable packet buffer protection on the zone.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/dos-and-zone-protection-best-practices"
+          ],
+          "pan_bpa_ids": [
+            212
+          ]
+        },
+        {
+          "slug": "gpgw-tls-versions",
+          "title": "GlobalProtect gateway TLS profiles need TLS 1.2 minimum and max version max",
+          "severity": "warning",
+          "section": "network",
+          "feature": "global_protect_gateway",
+          "evaluator": "gpgw_tls",
+          "rationale": "The gateway terminates remote-worker TLS; cap neither direction of the version range.",
+          "remediation": "Set the gateway TLS profile to min TLSv1.2 and max \"max\".",
+          "references": [
+            "https://docs.paloaltonetworks.com/globalprotect"
+          ],
+          "pan_bpa_ids": [
+            76
+          ]
+        },
+        {
+          "slug": "gpgw-client-auth",
+          "title": "GlobalProtect gateways should authenticate clients strongly",
+          "severity": "warning",
+          "section": "network",
+          "feature": "global_protect_gateway",
+          "evaluator": "gpgw_client_auth",
+          "rationale": "A gateway without certificate or authentication profiles is an open VPN concentrator.",
+          "remediation": "Attach a certificate profile or an authentication profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/globalprotect"
+          ],
+          "pan_bpa_ids": [
+            77
+          ]
+        },
+        {
+          "slug": "gpgw-full-tunnel",
+          "title": "GlobalProtect tunnel configs should route all destinations",
+          "severity": "warning",
+          "section": "network",
+          "feature": "global_protect_gateway",
+          "evaluator": "gpgw_split_tunnel",
+          "rationale": "Split-tunneled traffic bypasses every inspection layer the VPN exists to apply.",
+          "remediation": "Include 0.0.0.0/0 in the tunnel access routes.",
+          "references": [
+            "https://docs.paloaltonetworks.com/globalprotect"
+          ],
+          "pan_bpa_ids": [
+            78
+          ]
+        },
+        {
+          "slug": "gpgw-satellite-replay",
+          "title": "Satellite tunnels should detect replay attacks",
+          "severity": "informational",
+          "section": "network",
+          "feature": "global_protect_gateway",
+          "evaluator": "gpgw_satellite",
+          "rationale": "Without anti-replay",
+          "remediation": "Enable anti-replay on the satellite tunnel configuration.",
+          "references": [
+            "https://docs.paloaltonetworks.com/globalprotect"
+          ],
+          "pan_bpa_ids": [
+            79
+          ]
+        },
+        {
+          "slug": "ike-kem-round",
+          "title": "IKE crypto AKE rounds should include a post-quantum KEM",
+          "severity": "informational",
+          "section": "network",
+          "feature": "ike_crypto_profiles",
+          "evaluator": "crypto_ike_kem",
+          "rationale": "Classical-only key exchange is harvestable against future quantum capability.",
+          "remediation": "Add a KEM (ML-KEM/Kyber",
+          "references": [
+            "https://docs.paloaltonetworks.com/network-security"
+          ],
+          "pan_bpa_ids": [
+            359
+          ]
+        },
+        {
+          "slug": "ipsec-kem-round",
+          "title": "IPsec crypto AKE rounds should include a post-quantum KEM",
+          "severity": "informational",
+          "section": "network",
+          "feature": "ipsec_crypto_profile",
+          "evaluator": "crypto_ipsec_kem",
+          "rationale": "Same harvest-now-decrypt-later exposure on the data path; default AKE rounds inherit classical DH.",
+          "remediation": "Add a KEM to the profile's advanced key-exchange options.",
+          "references": [
+            "https://docs.paloaltonetworks.com/network-security"
+          ],
+          "pan_bpa_ids": [
+            358,
+            376
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "profiles",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "av-decoder-action",
+          "title": "Antivirus decoder actions should be reset-both for every protocol",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_decoder_actions",
+          "rationale": "Resetting both ends of an infected transfer stops delivery cleanly. The mail decoders (SMTP, IMAP, POP3) inherit a weaker content default, so leaving them on \"default\" means detected viruses are not blocked there.",
+          "remediation": "Set each decoder's signature Action to reset-both.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            33
+          ]
+        },
+        {
+          "slug": "av-wildfire-action",
+          "title": "Antivirus WildFire signature actions should be reset-both for every protocol",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_wildfire_actions",
+          "rationale": "WildFire signatures arrive minutes after a zero-day is identified; pairing them with a non-blocking action wastes that speed.",
+          "remediation": "Set each decoder's WildFire Action to reset-both.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            34
+          ]
+        },
+        {
+          "slug": "av-inline-ml-action",
+          "title": "Antivirus WildFire Inline ML actions should be reset-both for every protocol",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_mlav_actions",
+          "rationale": "Inline ML blocks never-seen malicious files in the data path; a non-blocking action reduces it to detection-only.",
+          "remediation": "Set each decoder's WildFire Inline ML Action to reset-both.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            271
+          ]
+        },
+        {
+          "slug": "av-inline-ml-models",
+          "title": "WildFire Inline ML models should be enabled (not alert-only or disabled)",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_mlav_engines",
+          "rationale": "Each disabled or alert-only model class (executables, scripts, ELF) is a file family the firewall sees but does not stop.",
+          "remediation": "Enable every WildFire Inline ML model in the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            272
+          ]
+        },
+        {
+          "slug": "av-threat-exceptions",
+          "title": "Antivirus profiles should not carry threat exceptions",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_threat_exceptions",
+          "rationale": "An excepted signature is permanently unenforced. Confirmed false positives should be fixed in content via support, then unexcepted.",
+          "remediation": "Remove threat exceptions once the underlying issue is resolved.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            31
+          ]
+        },
+        {
+          "slug": "av-application-exceptions",
+          "title": "Antivirus profiles should not except applications from inspection",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_app_exceptions",
+          "rationale": "An application exception with an allow action means that application's traffic is never virus-scanned at all.",
+          "remediation": "Remove application exceptions; resolve false positives via support.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            32
+          ]
+        },
+        {
+          "slug": "av-packet-capture",
+          "title": "Packet capture should not be enabled on broad Antivirus profiles",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_packet_capture",
+          "rationale": "Capturing packets for every virus event on a widely applied profile taxes logging; use a dedicated narrow profile when investigating.",
+          "remediation": "Disable packet capture on broadly attached profiles.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            35
+          ]
+        },
+        {
+          "slug": "av-one-sided-resets",
+          "title": "Avoid reset-client/reset-server antivirus actions without cause",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "antivirus_profile",
+          "evaluator": "av_reset_client_server",
+          "rationale": "One-sided resets leave the other end of the connection live; reserve them for documented cases where resetting one side breaks something.",
+          "remediation": "Prefer reset-both.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            206
+          ]
+        },
+        {
+          "slug": "fb-best-practice-rules",
+          "title": "File Blocking profiles should block the malicious file-type list and alert on the rest",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "file_blocking_profile",
+          "evaluator": "fb_best_practice_rules",
+          "rationale": "The reference posture is one block rule for exactly the risky file-type list (any application, both directions) and one alert rule covering every other type, so all file movement is at least visible. Rules that give other types different treatment (continue prompts, extra blocks) diverge from that posture and are flagged.",
+          "remediation": "Structure the profile as a block rule for the reference list plus an alert-all rule; handle deliberate deviations as documented exceptions.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            45
+          ]
+        },
+        {
+          "slug": "wf-forward-everything",
+          "title": "WildFire Analysis profiles should forward all files, both directions, any application",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "wildfire_analysis_profile",
+          "evaluator": "wf_forward_all",
+          "rationale": "Any file type or direction excluded from forwarding is a family of files that never gets a sandbox verdict.",
+          "remediation": "Use a rule with application any, file type any, direction both.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-wildfire/administration/advanced-wildfire-deployment-best-practices/advanced-wildfire-best-practices"
+          ],
+          "pan_bpa_ids": [
+            47
+          ]
+        },
+        {
+          "slug": "wf-inline-cloud-analysis",
+          "title": "WildFire profiles should enable Inline Cloud Analysis",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "wildfire_analysis_profile",
+          "evaluator": "wf_inline_cloud",
+          "rationale": "Inline cloud analysis returns machine-learning verdicts in the data path instead of waiting for the sandbox round-trip.",
+          "remediation": "Enable Inline Cloud Analysis on the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-wildfire"
+          ],
+          "pan_bpa_ids": [
+            363
+          ]
+        },
+        {
+          "slug": "lf-external-forwarding",
+          "title": "Log Forwarding profiles should send logs off-box",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "log_forwarding_profile",
+          "evaluator": "lf_external_forwarding",
+          "rationale": "A forwarding profile with no destination leaves logs on the firewall, where storage is small and rotation destroys evidence.",
+          "remediation": "Forward to Panorama, syslog, or an HTTP collector.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            51
+          ]
+        },
+        {
+          "slug": "lf-forward-threat",
+          "title": "Log Forwarding profiles should forward Threat logs",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "log_forwarding_profile",
+          "evaluator": "lf_log_type",
+          "rationale": "Threat events that never leave the box can't be correlated or retained.",
+          "remediation": "Add a threat log-type match with an off-box destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            52
+          ],
+          "params": {
+            "log_type": "threat"
+          }
+        },
+        {
+          "slug": "lf-forward-wildfire",
+          "title": "Log Forwarding profiles should forward WildFire logs",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "log_forwarding_profile",
+          "evaluator": "lf_log_type",
+          "rationale": "WildFire verdicts belong in the SIEM alongside the traffic they describe.",
+          "remediation": "Add a wildfire log-type match with an off-box destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            53
+          ],
+          "params": {
+            "log_type": "wildfire"
+          }
+        },
+        {
+          "slug": "lf-forward-url",
+          "title": "Log Forwarding profiles should forward URL logs",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "log_forwarding_profile",
+          "evaluator": "lf_log_type",
+          "rationale": "URL activity is a primary investigation source; keep it off-box.",
+          "remediation": "Add a url log-type match with an off-box destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            259
+          ],
+          "params": {
+            "log_type": "url"
+          }
+        },
+        {
+          "slug": "lf-forward-auth",
+          "title": "Log Forwarding profiles should forward Authentication logs",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "log_forwarding_profile",
+          "evaluator": "lf_log_type",
+          "rationale": "Authentication events off-box support incident timelines and audits.",
+          "remediation": "Add an auth log-type match with an off-box destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            260
+          ],
+          "params": {
+            "log_type": "auth"
+          }
+        }
+      ]
+    },
+    {
+      "pack": "rulebase",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "rb-interzone-default-logging",
+          "title": "The interzone-default deny rule should log at session end",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_default_rule_logging",
+          "rationale": "Traffic reaching interzone-default matched no explicit rule; without logging you never learn what your policy is missing.",
+          "remediation": "Override interzone-default and enable Log at Session End.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            12
+          ],
+          "params": {
+            "rule_name": "interzone-default"
+          }
+        },
+        {
+          "slug": "rb-intrazone-default-logging",
+          "title": "The intrazone-default allow rule should log at session end",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_default_rule_logging",
+          "rationale": "Same-zone traffic is allowed by default and otherwise invisible.",
+          "remediation": "Override intrazone-default and enable Log at Session End.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            13
+          ],
+          "params": {
+            "rule_name": "intrazone-default"
+          }
+        },
+        {
+          "slug": "rb-block-malicious-inbound",
+          "title": "Inbound traffic from known malicious IPs should be blocked",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_edl_block",
+          "rationale": "The vendor maintains this list for you; enforcing it is free coverage.",
+          "remediation": "Add a deny rule with the known-malicious EDL as source.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            261
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "panw-known-ip-list"
+            ]
+          }
+        },
+        {
+          "slug": "rb-block-malicious-outbound",
+          "title": "Outbound traffic to known malicious IPs should be blocked",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_edl_block",
+          "rationale": "Outbound blocking catches beaconing from already-compromised hosts.",
+          "remediation": "Add a deny rule with the known-malicious EDL as destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            262
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "panw-known-ip-list"
+            ]
+          }
+        },
+        {
+          "slug": "rb-block-highrisk-inbound",
+          "title": "Inbound traffic from high-risk IPs should be blocked",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_edl_block",
+          "rationale": "High-risk space is where scanning and exploitation originate.",
+          "remediation": "Add a deny rule with the high-risk EDL as source.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            263
+          ],
+          "params": {
+            "direction": "inbound",
+            "edl_names": [
+              "panw-highrisk-ip-list"
+            ]
+          }
+        },
+        {
+          "slug": "rb-block-highrisk-outbound",
+          "title": "Outbound traffic to high-risk IPs should be blocked",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_edl_block",
+          "rationale": "Blocks exfiltration and C2 toward high-risk space.",
+          "remediation": "Add a deny rule with the high-risk EDL as destination.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            264
+          ],
+          "params": {
+            "direction": "outbound",
+            "edl_names": [
+              "panw-highrisk-ip-list"
+            ]
+          }
+        },
+        {
+          "slug": "rb-block-quic",
+          "title": "QUIC should be blocked when decryption is in use",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_quic_block",
+          "rationale": "Browsers prefer QUIC and it is not decryptable by the forward proxy; leaving it open routes exactly the traffic you meant to inspect around inspection.",
+          "remediation": "Add a deny rule for the quic application (and UDP 80/443).",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            241
+          ]
+        },
+        {
+          "slug": "rb-userid-source-zones",
+          "title": "User-based rules need User-ID enabled on their source zones",
+          "severity": "critical",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_userid_source_zones",
+          "rationale": "A rule matching specific users from a zone without User-ID cannot resolve those users — the rule quietly never matches as intended.",
+          "remediation": "Enable User Identification on the referenced source zones.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/user-id-best-practices"
+          ],
+          "pan_bpa_ids": [
+            16
+          ]
+        },
+        {
+          "slug": "rb-adopt-url-filtering",
+          "title": "At least one rule should use a URL Filtering profile",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_profile_adoption",
+          "rationale": "A licensed subscription enforced by no rule protects nothing.",
+          "remediation": "Attach the profile to the rules that carry web traffic.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            366
+          ],
+          "params": {
+            "profile_kind": "url-filtering"
+          }
+        },
+        {
+          "slug": "rb-adopt-vulnerability",
+          "title": "At least one rule should use a Vulnerability Protection profile",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_profile_adoption",
+          "rationale": "Exploit protection unattached to any rule is inert.",
+          "remediation": "Attach the profile to allow rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            367
+          ],
+          "params": {
+            "profile_kind": "vulnerability"
+          }
+        },
+        {
+          "slug": "rb-adopt-spyware",
+          "title": "At least one rule should use an Anti-Spyware profile",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_profile_adoption",
+          "rationale": "C2 detection unattached to any rule is inert.",
+          "remediation": "Attach the profile to allow rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            368
+          ],
+          "params": {
+            "profile_kind": "spyware"
+          }
+        },
+        {
+          "slug": "rb-adopt-wildfire",
+          "title": "At least one rule should use a WildFire Analysis profile",
+          "severity": "informational",
+          "section": "policies",
+          "feature": "security_rulebase",
+          "evaluator": "rb_profile_adoption",
+          "rationale": "Sandboxing unattached to any rule never sees a file.",
+          "remediation": "Attach the profile to allow rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            370
+          ],
+          "params": {
+            "profile_kind": "wildfire-analysis"
+          }
+        },
+        {
+          "slug": "dec-rule-profile",
+          "title": "Decryption rules should have a decryption profile attached",
+          "severity": "warning",
+          "section": "policies",
+          "feature": "decryption_rulebase",
+          "evaluator": "rb_decrypt_rule_profile",
+          "rationale": "Without a profile the rule decrypts but enforces no protocol version, cipher, or certificate-failure policy on what it decrypts.",
+          "remediation": "Attach a decryption profile to every decrypt rule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            350
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "threat",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "as-severity-rules",
+          "title": "Anti-Spyware should block critical/high/medium threats with packet capture",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_severity_rules",
+          "rationale": "Spyware at these severities is active compromise traffic; the rule needs a blocking action, and packet capture preserves the evidence you'll want during the incident.",
+          "remediation": "Cover critical, high, and medium severities with rules whose action is reset-both (or drop/reset-client/reset-server/block-ip) and whose packet capture is single-packet or extended.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            40
+          ]
+        },
+        {
+          "slug": "as-low-info-default",
+          "title": "Anti-Spyware low/informational severities should use the default action",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_low_info_default",
+          "rationale": "Low-severity signatures are tuned for visibility; overriding them harder creates noise, and not covering them at all loses visibility.",
+          "remediation": "Cover low and informational severities with default-action rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            201
+          ]
+        },
+        {
+          "slug": "as-threat-exceptions",
+          "title": "Anti-Spyware profiles should not carry threat exceptions",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_threat_exceptions",
+          "rationale": "An excepted signature is permanently unenforced.",
+          "remediation": "Resolve false positives via support, then remove the exception.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            36
+          ]
+        },
+        {
+          "slug": "as-dns-sinkhole",
+          "title": "DNS Security categories should sinkhole with packet capture",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_dns_sinkhole",
+          "rationale": "Sinkholing redirects malicious resolutions to a known address so the querying (compromised) host is identifiable in traffic logs; capture levels follow the reference per-category matrix.",
+          "remediation": "Set every DNS Security category action to sinkhole; extended capture for command-and-control, single-packet for the rest.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention/administration/configure-threat-prevention/use-dns-queries-to-identify-infected-hosts-on-the-network/configure-dns-sinkholing"
+          ],
+          "pan_bpa_ids": [
+            38
+          ]
+        },
+        {
+          "slug": "as-dns-cloud-c2",
+          "title": "DNS Security command-and-control category must sinkhole with capture",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_dns_cloud",
+          "rationale": "C2 domain lookups are the highest-signal DNS event; letting them resolve with the content default forfeits both blocking and attribution.",
+          "remediation": "Sinkhole pan-dns-sec-cc with extended capture and logging.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention"
+          ],
+          "pan_bpa_ids": [
+            253
+          ]
+        },
+        {
+          "slug": "as-inline-cloud-engines",
+          "title": "Anti-Spyware Inline Cloud Analysis engines should block",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_inline_engines",
+          "rationale": "Inline cloud analysis without blocking actions detects C2 in the data path but lets it through.",
+          "remediation": "Enable Inline Cloud Analysis and set every engine to drop or reset.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention"
+          ],
+          "pan_bpa_ids": [
+            334
+          ]
+        },
+        {
+          "slug": "as-inline-cloud-enabled",
+          "title": "Anti-Spyware Inline Cloud Analysis should be enabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "anti_spyware_profile",
+          "evaluator": "as_inline_enabled",
+          "rationale": "In-line ML verdicts catch C2 variants ahead of signatures.",
+          "remediation": "Enable Inline Cloud Analysis on the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention"
+          ],
+          "pan_bpa_ids": [
+            364
+          ]
+        },
+        {
+          "slug": "vp-severity-rules",
+          "title": "Vulnerability Protection should block critical/high/medium with packet capture",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "vulnerability_protection_profile",
+          "evaluator": "vp_severity_rules",
+          "rationale": "Exploit attempts at these severities warrant blocking and captured evidence; a detect-only or capture-less rule leaves gaps in both.",
+          "remediation": "Cover critical, high, and medium severities with blocking-action rules and packet capture enabled.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/create-best-practice-security-profiles"
+          ],
+          "pan_bpa_ids": [
+            42
+          ]
+        },
+        {
+          "slug": "vp-low-info-default",
+          "title": "Vulnerability Protection low/informational severities should use the default action",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "vulnerability_protection_profile",
+          "evaluator": "vp_low_info_default",
+          "rationale": "Same visibility-without-noise posture as the spyware profile.",
+          "remediation": "Cover low and informational severities with default-action rules.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            200
+          ]
+        },
+        {
+          "slug": "vp-threat-exceptions",
+          "title": "Vulnerability Protection profiles should not carry threat exceptions",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "vulnerability_protection_profile",
+          "evaluator": "vp_threat_exceptions",
+          "rationale": "An excepted signature is permanently unenforced.",
+          "remediation": "Resolve false positives via support, then remove the exception.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            41
+          ]
+        },
+        {
+          "slug": "vp-inline-cloud-engines",
+          "title": "Vulnerability Inline Cloud Analysis engines should block",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "vulnerability_protection_profile",
+          "evaluator": "vp_inline_engines",
+          "rationale": "Detection-only inline analysis lets identified exploits through.",
+          "remediation": "Enable Inline Cloud Analysis and set every engine to drop or reset.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention"
+          ],
+          "pan_bpa_ids": [
+            360
+          ]
+        },
+        {
+          "slug": "vp-inline-cloud-enabled",
+          "title": "Vulnerability Inline Cloud Analysis should be enabled",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "vulnerability_protection_profile",
+          "evaluator": "vp_inline_enabled",
+          "rationale": "In-line ML verdicts catch exploit variants ahead of signatures.",
+          "remediation": "Enable Inline Cloud Analysis on the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-threat-prevention"
+          ],
+          "pan_bpa_ids": [
+            365
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "updates-logging",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "du-antivirus-hourly",
+          "title": "Antivirus content should download-and-install hourly",
+          "severity": "warning",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_antivirus",
+          "rationale": "Hourly AV updates keep the signature gap to minutes, not days.",
+          "remediation": "Schedule antivirus updates hourly, download-and-install, no threshold.",
+          "references": [
+            "https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-upgrade/software-and-content-updates/best-practices-for-app-and-threat-content-updates"
+          ],
+          "pan_bpa_ids": [
+            188
+          ]
+        },
+        {
+          "slug": "du-apps-threats",
+          "title": "Apps and Threats content should install at least daily (threshold \u003c= 48h)",
+          "severity": "warning",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_apps_threats",
+          "rationale": "Stale threat content means known-signature attacks pass unrecognized.",
+          "remediation": "Schedule Apps and Threats download-and-install daily or faster.",
+          "references": [
+            "https://docs.paloaltonetworks.com/pan-os/11-1/pan-os-upgrade/software-and-content-updates/best-practices-for-app-and-threat-content-updates"
+          ],
+          "pan_bpa_ids": [
+            189
+          ]
+        },
+        {
+          "slug": "du-wildfire-realtime",
+          "title": "WildFire content should update in real time",
+          "severity": "warning",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_wildfire",
+          "rationale": "Real-time delivery is the point of WildFire's minutes-after-discovery signatures.",
+          "remediation": "Set the WildFire schedule to real-time.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-wildfire"
+          ],
+          "pan_bpa_ids": [
+            190
+          ]
+        },
+        {
+          "slug": "du-sync-peer-antivirus",
+          "title": "HA pairs should sync antivirus content to peer",
+          "severity": "informational",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_sync_peer_av",
+          "rationale": "Divergent content between HA peers changes enforcement on failover.",
+          "remediation": "Enable Sync To Peer on the antivirus schedule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            191
+          ]
+        },
+        {
+          "slug": "du-sync-peer-threats",
+          "title": "HA pairs should sync Apps and Threats content to peer",
+          "severity": "informational",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_sync_peer_at",
+          "rationale": "Same failover-consistency argument as antivirus.",
+          "remediation": "Enable Sync To Peer on the Apps and Threats schedule.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            192
+          ]
+        },
+        {
+          "slug": "du-gp-datafile",
+          "title": "GlobalProtect data file content should install hourly",
+          "severity": "informational",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_gp_datafile",
+          "rationale": "HIP and clientless content lags without a schedule.",
+          "remediation": "Schedule GlobalProtect data file updates hourly.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            194
+          ]
+        },
+        {
+          "slug": "du-gp-clientless",
+          "title": "GlobalProtect clientless VPN content should install hourly",
+          "severity": "informational",
+          "section": "device",
+          "feature": "dynamic_updates",
+          "evaluator": "du_gp_clientless",
+          "rationale": "Clientless app definitions drift without a schedule.",
+          "remediation": "Schedule GlobalProtect clientless VPN updates hourly.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            195
+          ]
+        },
+        {
+          "slug": "ls-system-low-forwarded",
+          "title": "Informational/low system logs should be forwarded",
+          "severity": "informational",
+          "section": "device",
+          "feature": "log_settings_system",
+          "evaluator": "ls_system_low",
+          "rationale": "Low-severity system logs carry the early signals of developing problems.",
+          "remediation": "Forward all system log severities off-box.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            177
+          ]
+        },
+        {
+          "slug": "ls-system-high-forwarded",
+          "title": "Medium/high/critical system logs should be forwarded",
+          "severity": "warning",
+          "section": "device",
+          "feature": "log_settings_system",
+          "evaluator": "ls_system_high",
+          "rationale": "HA failovers, hardware faults, and attacks announce themselves here.",
+          "remediation": "Forward all system log severities off-box.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            178
+          ]
+        },
+        {
+          "slug": "ls-config-forwarded",
+          "title": "Configuration logs should be forwarded",
+          "severity": "warning",
+          "section": "device",
+          "feature": "log_settings_config",
+          "evaluator": "ls_config",
+          "rationale": "Config-change audit trails must outlive on-box rotation.",
+          "remediation": "Forward configuration logs off-box.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            182
+          ]
+        },
+        {
+          "slug": "sprof-syslog-ssl",
+          "title": "Syslog server profiles should use SSL transport",
+          "severity": "warning",
+          "section": "device",
+          "feature": "syslog_server_profile",
+          "evaluator": "sprof_syslog_ssl",
+          "rationale": "Cleartext syslog is readable and forgeable in transit.",
+          "remediation": "Set syslog transport to SSL.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            185
+          ]
+        },
+        {
+          "slug": "sprof-tacplus-chap",
+          "title": "TACACS+ profiles should authenticate with CHAP",
+          "severity": "informational",
+          "section": "device",
+          "feature": "tacplus_server_profile",
+          "evaluator": "sprof_tacplus_chap",
+          "rationale": "PAP sends the password in reversible form; CHAP does not.",
+          "remediation": "Set the TACACS+ authentication protocol to CHAP.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            234
+          ]
+        },
+        {
+          "slug": "sprof-ldap-ssl",
+          "title": "LDAP profiles should require SSL/TLS",
+          "severity": "warning",
+          "section": "device",
+          "feature": "ldap_server_profile",
+          "evaluator": "sprof_ldap_ssl",
+          "rationale": "Unencrypted binds expose directory credentials.",
+          "remediation": "Enable Require SSL/TLS Secured Connection.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            186
+          ]
+        },
+        {
+          "slug": "sprof-ldap-verify-cert",
+          "title": "LDAP profiles should verify the server certificate",
+          "severity": "warning",
+          "section": "device",
+          "feature": "ldap_server_profile",
+          "evaluator": "sprof_ldap_verify",
+          "rationale": "TLS without verification authenticates you to anyone.",
+          "remediation": "Enable Verify Server Certificate for SSL sessions.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            187
+          ]
+        },
+        {
+          "slug": "sprof-ldap-redundancy",
+          "title": "LDAP profiles should list two or more servers",
+          "severity": "informational",
+          "section": "device",
+          "feature": "ldap_server_profile",
+          "evaluator": "sprof_ldap_redund",
+          "rationale": "One directory server makes authentication a single point of failure.",
+          "remediation": "Add a second LDAP server to the profile.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            199
+          ]
+        },
+        {
+          "slug": "cert-trust-untrust-split",
+          "title": "Forward Trust and Forward Untrust must be different certificates",
+          "severity": "critical",
+          "section": "device",
+          "feature": "certificate",
+          "evaluator": "cert_trust_split",
+          "rationale": "If the untrust CA chains to something clients trust, invalid upstream certificates are laundered into trusted ones.",
+          "remediation": "Use a separate, untrusted certificate for Forward Untrust.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-2/decryption-best-practices"
+          ],
+          "pan_bpa_ids": [
+            267
+          ]
+        },
+        {
+          "slug": "tls-profile-versions",
+          "title": "SSL/TLS service profiles should require TLS 1.2 minimum",
+          "severity": "warning",
+          "section": "device",
+          "feature": "ssl_tls_service_profile",
+          "evaluator": "tls_profile_vers",
+          "rationale": "Management and portal services deserve the same protocol floor as decryption.",
+          "remediation": "Set Min Version TLSv1.2, Max Version max.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            63
+          ]
+        },
+        {
+          "slug": "role-custom-defined",
+          "title": "Custom admin roles should define actual permissions",
+          "severity": "informational",
+          "section": "device",
+          "feature": "admin_role",
+          "evaluator": "role_custom",
+          "rationale": "An empty role grants nothing and audits as clutter.",
+          "remediation": "Define device/vsys permissions in the role or remove it.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices/10-1/administrative-access-best-practices"
+          ],
+          "pan_bpa_ids": [
+            154
+          ]
+        },
+        {
+          "slug": "authseq-secondary",
+          "title": "Authentication sequences should include a fallback profile",
+          "severity": "informational",
+          "section": "device",
+          "feature": "authentication_sequence",
+          "evaluator": "authseq_secondary",
+          "rationale": "A one-profile sequence fails exactly when the sequence was supposed to help.",
+          "remediation": "Add a secondary authentication profile to the sequence.",
+          "references": [
+            "https://docs.paloaltonetworks.com/best-practices"
+          ],
+          "pan_bpa_ids": [
+            159
+          ]
+        }
+      ]
+    },
+    {
+      "pack": "url-filtering",
+      "version": "0.1.0",
+      "checks": [
+        {
+          "slug": "uf-block-malicious",
+          "title": "Known-malicious URL categories should be blocked",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_block_malicious",
+          "rationale": "Command-and-control, malware, phishing, ransomware, compromised and scanning categories are outright hostile; anything short of block is accepting the first stage of an intrusion.",
+          "remediation": "Block all known-malicious categories.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            43
+          ]
+        },
+        {
+          "slug": "uf-block-liability",
+          "title": "Liability-risk URL categories should be blocked",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_block_liability",
+          "rationale": "These categories carry legal and HR exposure rather than malware; blocking is the reference posture, with deliberate exceptions where business need is documented.",
+          "remediation": "Block the liability-risk category group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            340
+          ]
+        },
+        {
+          "slug": "uf-block-risky",
+          "title": "Potentially malicious URL categories should be blocked",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_block_risky",
+          "rationale": "Dynamic DNS, encrypted DNS, parked, unknown, newly registered domains and their kin are where attacks stage before categorization catches up.",
+          "remediation": "Block the potentially malicious category group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            341
+          ]
+        },
+        {
+          "slug": "uf-block-genai",
+          "title": "Generative AI categories should be blocked (site and credential)",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_block_genai",
+          "rationale": "Unsanctioned generative AI tools are a data-exfiltration channel; the posture is category-level block with sanctioned tools re-allowed explicitly.",
+          "remediation": "Block the AI category group for site access and credential submission.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            357
+          ]
+        },
+        {
+          "slug": "uf-cred-malicious",
+          "title": "Credential submission should be blocked for known-malicious categories",
+          "severity": "critical",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_cred_malicious",
+          "rationale": "A corporate credential typed into a phishing or C2 site is the breach; credential blocking is the last line when the site itself was reachable.",
+          "remediation": "Block credential submission for the known-malicious group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            207
+          ]
+        },
+        {
+          "slug": "uf-cred-liability",
+          "title": "Credential submission should be blocked for liability-risk categories",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_cred_liability",
+          "rationale": "Corporate credentials have no business being entered on these sites.",
+          "remediation": "Block credential submission for the liability-risk group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            344
+          ]
+        },
+        {
+          "slug": "uf-cred-risky",
+          "title": "Credential submission should be blocked for potentially malicious categories",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_cred_risky",
+          "rationale": "Categories that haven't earned trust (unknown, newly registered, parked) are exactly where harvested-credential pages live.",
+          "remediation": "Block credential submission for the potentially malicious group.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            345
+          ]
+        },
+        {
+          "slug": "uf-log-container-only",
+          "title": "Log Container Page Only should be disabled",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_log_container",
+          "rationale": "With container-only logging (the default), embedded-content requests never appear in URL logs — precisely the requests investigations need.",
+          "remediation": "Disable Log Container Page Only.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            44
+          ]
+        },
+        {
+          "slug": "uf-cred-domain-filter",
+          "title": "Credential detection should use the Domain Credential Filter",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_cred_mode",
+          "rationale": "The domain credential filter matches actual corporate credentials; lesser modes miss or over-match, and disabled means no detection at all.",
+          "remediation": "Set User Credential Detection to Use Domain Credential Filter.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            227
+          ]
+        },
+        {
+          "slug": "uf-inline-ml",
+          "title": "URL Filtering inline ML should block on every model",
+          "severity": "warning",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_inline_ml",
+          "rationale": "Inline categorization catches phishing and JS-exploit pages in the request path — but only actions set to block actually stop them.",
+          "remediation": "Enable Inline Categorization and set every model action to block.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering"
+          ],
+          "pan_bpa_ids": [
+            273
+          ]
+        },
+        {
+          "slug": "uf-category-logging",
+          "title": "No URL category should use the allow action (unlogged)",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_category_logging",
+          "rationale": "Allow generates no log; alert preserves visibility at zero user impact.",
+          "remediation": "Use alert instead of allow for permitted categories.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            196
+          ]
+        },
+        {
+          "slug": "uf-cred-logging",
+          "title": "No credential-submission category should use the allow action",
+          "severity": "informational",
+          "section": "objects",
+          "feature": "url_filtering_profile",
+          "evaluator": "uf_cred_logging",
+          "rationale": "Unlogged credential submissions are invisible credential reuse.",
+          "remediation": "Use alert as the minimum credential-submission action.",
+          "references": [
+            "https://docs.paloaltonetworks.com/advanced-url-filtering/administration/configuring-url-filtering/url-filtering-best-practices"
+          ],
+          "pan_bpa_ids": [
+            346
+          ]
+        }
+      ]
+    }
+  ]
+}

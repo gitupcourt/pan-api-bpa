@@ -1,0 +1,4 @@
+# template.html is vendored byte-identical from open-pan-bpa — its hash must
+# survive checkout on any platform, so no EOL conversion ever.
+template.html -text
+catalog.json -text
