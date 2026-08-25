@@ -579,8 +579,12 @@ def main():
     template_path = args.template or os.path.join(SCRIPT_DIR, "template.html")
     formats = {x.strip() for x in args.format.split(",") if x.strip()}
     if "html" in formats and not os.path.exists(template_path):
-        die(f"template.html not found at {template_path} — it ships next to "
-            "this script (vendored from open-pan-bpa; see VENDORED.md).")
+        die(f"template.html not found at {template_path}\n"
+            "  This tool is three files that travel together: pan_api_bpa.py, "
+            "template.html, and catalog.json.\n"
+            "  Run the script from its repo folder (full path is fine), copy "
+            "all three files together,\n"
+            "  or pass --template/--catalog. See README.md 'Setup'.")
     catalog = load_catalog(args.catalog)
 
     with tempfile.TemporaryDirectory() as workdir:

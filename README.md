@@ -58,12 +58,29 @@ flow built in as `bpa api-scan` (a separate, explicitly-online subcommand;
 
 ## Setup
 
+**Get the whole folder, not just the script.** The tool is three files that
+travel together — `pan_api_bpa.py` plus its vendored companions
+`template.html` (the report template) and `catalog.json` (the check
+catalog), which are resolved **next to the script**, wherever it lives:
+
+```
+git clone https://github.com/gitupcourt/pan-api-bpa
+python pan-api-bpa/pan_api_bpa.py --tsf device_ts.tgz --out reports/
+```
+
+Running it by full path from any working directory is fine. What does *not*
+work is copying `pan_api_bpa.py` somewhere by itself — it will stop with a
+"template.html not found" error rather than render a broken report. If you
+must relocate it, take all three files (or point at them with `--template`
+and `--catalog`).
+
 ```
 pip install requests
 ```
 
-That's the only dependency (and only for live API runs — `--report` mode,
-converting an existing API report JSON, is stdlib-only and fully offline).
+That's the only package dependency (and only for live API runs — `--report`
+mode, converting an existing API report JSON, is stdlib-only and fully
+offline).
 
 **Authentication** uses the common SASE service-account model, documented by
 Palo Alto Networks:
