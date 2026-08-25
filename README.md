@@ -46,6 +46,26 @@ python pan_api_bpa.py --tsf device_ts.tgz --out reports/
 python pan_api_bpa.py --report bpa_xxxx.json --hostname fw01 --out reports/
 ```
 
+## Where the best practices come from
+
+Nothing here is invented:
+
+- **The verdicts are Palo Alto Networks' own.** This tool submits the config
+  to PAN's hosted posture (BPA) engine and reports what *their* engine
+  returned — check names, messages, and pass/fail results all originate from
+  the vendor's assessment of your configuration.
+- **Documentation citations ride along.** Checks mapped to the open-pan-bpa
+  catalog carry that catalog's `references` — links to the specific pages on
+  [docs.paloaltonetworks.com](https://docs.paloaltonetworks.com)
+  (Best Practices portal and admin guides) — rendered as `[doc N]` links in
+  the HTML and a `references` column in the CSV. open-pan-bpa enforces in CI
+  that every cataloged check cites its documentation.
+- Unmapped checks pass through with Palo Alto Networks' own check text
+  verbatim, so the vendor's wording is the source even without a citation.
+- The verdict corrections (scope filtering, disabled-rule and
+  predefined-object downgrades) reclassify — they never delete a vendor
+  finding, and `--no-corrections` disables them entirely.
+
 ## Conversion semantics
 
 - Verdict vocabulary matches the offline engine: `pass / fail / note / n/a`.
