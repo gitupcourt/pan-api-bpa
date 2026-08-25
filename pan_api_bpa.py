@@ -17,7 +17,14 @@ Presentation (HTML/CSV) is deliberately NOT implemented here: the converted
 report is handed to `bpa render`, so both tools share one presentation layer
 and output improvements never need porting.
 
-Not an official Palo Alto Networks product. Results are advisory.
+The assessment engine is Palo Alto Networks' own; this is a client of their
+documented public API:
+  Posture / BPA API : https://pan.dev/scm/api/config/posture-management/introduction-posture/
+  Auth (SASE model) : https://pan.dev/sase/docs/service-accounts/
+  Legacy AIOps BPA  : https://pan.dev/aiops-ngfw-bpa/api/
+
+This tool is not itself an official Palo Alto Networks product. Results are
+advisory.
 
 Prereqs:
   - pip install requests

@@ -1,11 +1,29 @@
 # pan-api-bpa
 
-Drive the hosted SCM Posture (BPA) API against a PAN-OS config or tech
-support file, then present the results through
-[open-pan-bpa](https://github.com/gitupcourt/open-pan-bpa)'s renderer — so
-API-based and offline assessments produce identical HTML/CSV output.
+Drive **Palo Alto Networks' official Best Practice Assessment (BPA) API**
+against a PAN-OS config or tech support file, then present the results
+through [open-pan-bpa](https://github.com/gitupcourt/open-pan-bpa)'s
+renderer — so API-based and offline assessments produce identical HTML/CSV
+output. The assessment itself is performed by Palo Alto Networks' hosted
+engine; this script automates the submission and parses its report.
 
-**Not an official Palo Alto Networks product.** Results are advisory.
+**This tool is not itself an official Palo Alto Networks product** (it is an
+independent client of their documented public API). Results are advisory.
+
+## The official API
+
+- **Posture Management / BPA API** (the default and go-forward path this
+  tool drives):
+  [pan.dev — Posture introduction](https://pan.dev/scm/api/config/posture-management/introduction-posture/).
+  Workflow: request an upload URL, PUT the PAN-OS configuration, poll for
+  completion, download the report JSON.
+- **AIOps for NGFW BPA API** (the previous generation, same authentication
+  model): [pan.dev — AIOps NGFW BPA](https://pan.dev/aiops-ngfw-bpa/api/).
+  Kept for reference; tenants migrated to native SCM typically cannot use it
+  (error 1210 — no AIOps instance to bind).
+- The API's optional `delete_after_processing` flag (exposed here as
+  `--delete-after-processing`) instructs the service to delete the uploaded
+  configuration once the report is generated.
 
 ## How it fits together
 
@@ -28,7 +46,21 @@ Any report-output improvement over there applies here automatically.
 pip install requests
 ```
 
-Plus the `bpa` binary on PATH (or `--bpa-bin`). Credentials are env-only:
+Plus the `bpa` binary on PATH (or `--bpa-bin`).
+
+**Authentication** uses the common SASE service-account model, documented by
+Palo Alto Networks:
+
+1. [Get started](https://pan.dev/sase/docs/getstarted/) — obtain your
+   Tenant Service Group (TSG) ID.
+2. [Create a service account](https://pan.dev/sase/docs/service-accounts/)
+   for that TSG (needs an SCM role — Essentials or Pro) — this yields the
+   Client ID and Client Secret.
+3. The script exchanges those for an
+   [OAuth2 access token](https://pan.dev/sase/api/auth/post-auth-v-1-oauth-2-access-token/)
+   with scope `tsg_id:{TSG}` automatically.
+
+Credentials are env-only (never flags, so secrets stay out of shell history):
 
 ```
 $env:PANW_CLIENT_ID     = "..."   # SCM service account
