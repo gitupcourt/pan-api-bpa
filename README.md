@@ -32,13 +32,18 @@ config / TSF ──> Posture API ──> API report JSON
                                       │  convert (this tool)
                                       ▼
                        open-pan-bpa report schema JSON
-                                      │  bpa render
+                                      │  render (this tool)
                                       ▼
-                            HTML + CSV (shared layer)
+              HTML + CSV — byte-identical to open-pan-bpa's
 ```
 
-Presentation lives **only** in open-pan-bpa. This tool fetches and converts.
-Any report-output improvement over there applies here automatically.
+**Standalone by design — no binary required.** Everything happens in one
+readable Python file. This is the "trust but verify" path: if you'd rather
+not run a compiled binary, you can audit every line of what touches your
+config. The HTML is rendered through a byte-identical vendored copy of
+open-pan-bpa's report template, and the output is verified byte-for-byte
+against the binary's renderer (see [VENDORED.md](VENDORED.md)) — same
+report, either tool, provably.
 
 ## Setup
 
@@ -46,7 +51,8 @@ Any report-output improvement over there applies here automatically.
 pip install requests
 ```
 
-Plus the `bpa` binary on PATH (or `--bpa-bin`).
+That's the only dependency (and only for live API runs — `--report` mode,
+converting an existing API report JSON, is stdlib-only and fully offline).
 
 **Authentication** uses the common SASE service-account model, documented by
 Palo Alto Networks:

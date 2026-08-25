@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
 """
-pan_api_bpa.py — run a PAN-OS config through the hosted SCM Posture (BPA) API
-and present the results through open-pan-bpa's renderer.
+pan_api_bpa.py — run a PAN-OS config through Palo Alto Networks' official
+hosted BPA (posture) API and produce reports in open-pan-bpa's format —
+with no binary and no dependency beyond `requests`.
 
-This tool is the API-driven sibling of open-pan-bpa (offline engine). It owns
-exactly two jobs:
-
-  1. FETCH   — drive the SCM Posture API (upload config, poll, download the
-               report JSON), carrying every workaround the API needs in
-               practice (see NOTES below).
-  2. CONVERT — map the API report JSON into the open-pan-bpa report schema,
-               applying the same verdict vocabulary the offline engine uses
-               natively (pass / fail / note / n/a).
-
-Presentation (HTML/CSV) is deliberately NOT implemented here: the converted
-report is handed to `bpa render`, so both tools share one presentation layer
-and output improvements never need porting.
+This is the standalone, auditable sibling of open-pan-bpa (the offline
+engine). It exists for the "trust but verify" case: everything it does is in
+this one readable file, and the HTML it produces is rendered through a
+byte-identical vendored copy of open-pan-bpa's report template
+(`template.html` — verify it against the open-pan-bpa source at the pinned
+version in VENDORED.md). The assessment verdicts themselves are Palo Alto
+Networks' own: this script submits the config to PAN's hosted engine and
+reports what their engine returned.
 
 The assessment engine is Palo Alto Networks' own; this is a client of their
 documented public API:
@@ -27,9 +23,7 @@ This tool is not itself an official Palo Alto Networks product. Results are
 advisory.
 
 Prereqs:
-  - pip install requests
-  - the `bpa` binary (open-pan-bpa >= 0.4) on PATH, or --bpa-bin
-  - SCM service account with an SCM role on the TSG
+  - pip install requests   (only needed for live API runs, not --report)
 
 Credentials are read from environment variables ONLY (never flags, so secrets
 stay out of shell history):
@@ -39,7 +33,7 @@ Examples:
   # Full run from a tech support file:
   python pan_api_bpa.py --tsf device_ts.tgz --out reports/
 
-  # Convert + render an API report JSON you already have (no network):
+  # Convert + render an API report JSON you already have (fully offline):
   python pan_api_bpa.py --report bpa_xxxx.json --hostname fw01 --out reports/
 
 NOTES — hard-won API behavior this script bakes in (do not "fix" these):
@@ -52,17 +46,18 @@ NOTES — hard-won API behavior this script bakes in (do not "fix" these):
     lands in `result.custom_check_url`. Every http(s) URL in `result` is
     downloaded.
   - Check IDs are registry-specific. Mapping to open-pan-bpa slugs uses the
-    catalog's pan_bpa_ids cross-references and falls back to synthetic
-    pan-api-<id> slugs; never treat IDs as stable across runs.
+    vendored catalog's pan_bpa_ids cross-references and falls back to
+    synthetic pan-api-<id> slugs; never treat IDs as stable across runs.
 """
 
 import argparse
+import csv
 import datetime
 import gzip
+import html
 import json
 import os
 import re
-import subprocess
 import sys
 import tarfile
 import tempfile
@@ -73,7 +68,13 @@ AUTH_URL = "https://auth.apps.paloaltonetworks.com/oauth2/access_token"
 POSTURE_BASE = "https://api.strata.paloaltonetworks.com"
 
 TOOL = "pan-api-bpa"
-TOOL_VERSION = "0.1.0"
+TOOL_VERSION = "0.2.0"
+# Report schema this converter targets (open-pan-bpa's contract). The
+# vendored catalog carries the authoritative value; this is the fallback
+# when running without a catalog.
+SCHEMA_VERSION = "0.1.0"
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ------------------------------------------------------------------ fetch ---
 
@@ -269,23 +270,25 @@ def is_allow_only(check_id, check_name):
     return any(f in n for f in ALLOW_ONLY_NAME_FRAGMENTS)
 
 
-def load_catalog(bpa_bin):
-    """Ask the bpa binary for its check catalog; build an id->check map."""
-    try:
-        out = subprocess.run([bpa_bin, "catalog"], capture_output=True,
-                             text=True, check=True, encoding="utf-8")
-    except FileNotFoundError:
-        die(f"'{bpa_bin}' not found — install open-pan-bpa or pass --bpa-bin")
-    except subprocess.CalledProcessError as e:
-        die(f"'{bpa_bin} catalog' failed: {e.stderr[:500]}")
-    cat = json.loads(out.stdout)
+def load_catalog(path):
+    """Load the vendored open-pan-bpa check catalog (catalog.json). Optional:
+    without it, all checks pass through with the API's own text and no doc
+    citations."""
+    if not path:
+        path = os.path.join(SCRIPT_DIR, "catalog.json")
+    if not os.path.exists(path):
+        print(f"      NOTE: no catalog at {path}; checks will not be mapped "
+              "to open-pan-bpa slugs or documentation references.")
+        return {"schema_version": SCHEMA_VERSION, "by_id": {}}
+    with open(path, encoding="utf-8") as f:
+        cat = json.load(f)
     by_id = {}
     for pack in cat.get("packs") or []:
         for chk in pack.get("checks") or []:
             for pid in chk.get("pan_bpa_ids") or []:
                 by_id.setdefault(pid, chk)
-    return {"schema_version": cat.get("schema_version"),
-            "tool_version": cat.get("tool_version"), "by_id": by_id}
+    return {"schema_version": cat.get("schema_version") or SCHEMA_VERSION,
+            "by_id": by_id}
 
 
 def convert(api, catalog, hostname, input_path, corrections=True):
@@ -356,8 +359,7 @@ def convert(api, catalog, hostname, input_path, corrections=True):
     return {
         "schema_version": catalog["schema_version"],
         "tool": TOOL,
-        "tool_version": f"{TOOL_VERSION} (api registry {registry or 'unknown'};"
-                        f" render {catalog['tool_version']})",
+        "tool_version": f"{TOOL_VERSION} (api registry {registry or 'unknown'})",
         "generated_at": datetime.datetime.now(datetime.timezone.utc)
                         .strftime("%Y-%m-%dT%H:%M:%SZ"),
         "hostname": hostname or "api-device",
@@ -423,33 +425,143 @@ def convert_check(chk, origin, obj, cfg, feature, by_id, corrections):
     return f
 
 
+# ----------------------------------------------------------------- render ---
+# Mirrors open-pan-bpa's internal/report renderer. The HTML template is a
+# byte-identical vendored copy of that project's template.html; only the
+# payload construction below is reimplemented, so the rendered report is
+# indistinguishable from the binary's output.
+
+SEV_CODE = {"critical": 0, "high": 1, "warning": 2, "informational": 3}
+V_CODE = {"fail": 0, "note": 1, "pass": 2}
+
+
+def build_payload(rep):
+    """Build the template's embedded dataset. Finding tuple layout matches
+    the template's contract: [checkIdx, verdict, severity, locIdx, feature,
+    name, message]. n/a findings are excluded, mirroring the Go renderer."""
+    checks, check_idx = [], {}
+    locs, loc_idx = [], {}
+    findings = []
+    for f in rep["findings"]:
+        v = f["verdict"]
+        if v == "n/a":
+            continue
+        ci = check_idx.get(f["slug"])
+        if ci is None:
+            ci = len(checks)
+            check_idx[f["slug"]] = ci
+            # Key order mirrors the Go struct field order so the emitted
+            # JSON is byte-identical to the binary's.
+            row = {"slug": f["slug"], "title": f["title"],
+                   "sev": SEV_CODE.get(f["severity"], 3),
+                   "sec": f["object"]["section"]}
+            if f.get("references"):
+                row["refs"] = f["references"]
+            row.update({"pass": 0, "fail": 0, "notes": 0})
+            checks.append(row)
+        loc = f["object"]["location"]
+        li = loc_idx.get(loc)
+        if li is None:
+            li = len(locs)
+            loc_idx[loc] = li
+            locs.append(loc)
+        checks[ci]["pass" if v == "pass" else "fail" if v == "fail" else "notes"] += 1
+        findings.append([ci, V_CODE[v], SEV_CODE.get(f["severity"], 3), li,
+                         f["object"]["feature"], f["object"]["name"],
+                         f.get("message", "")])
+    # Stable slug order for the by-check table, with index remap (mirrors Go).
+    order = sorted(range(len(checks)), key=lambda i: checks[i]["slug"])
+    remap = {old: new for new, old in enumerate(order)}
+    checks = [checks[i] for i in order]
+    for t in findings:
+        t[0] = remap[t[0]]
+    return {"checks": checks, "locations": locs, "findings": findings}
+
+
+def render_html(rep, template_path, out_path):
+    with open(template_path, encoding="utf-8") as f:
+        tpl = f.read()
+    # ensure_ascii=False: Go emits raw UTF-8, not \uXXXX escapes.
+    payload = json.dumps(build_payload(rep), separators=(",", ":"),
+                         ensure_ascii=False)
+    # Escape HTML-significant characters exactly as Go's json.Marshal does
+    # (also guarantees the payload can never terminate the <script> element).
+    payload = (payload.replace("&", "\\u0026")
+               .replace("<", "\\u003c").replace(">", "\\u003e"))
+    gen = datetime.datetime.strptime(
+        rep["generated_at"], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H:%M UTC")
+    s = rep["summary"]
+    subs = {
+        "{{.Rep.Hostname}}": html.escape(rep["hostname"]),
+        "{{.Rep.ToolVersion}}": html.escape(rep["tool_version"]),
+        "{{.Rep.SchemaVersion}}": html.escape(rep["schema_version"]),
+        '{{.Rep.GeneratedAt.Format "2006-01-02 15:04 UTC"}}': gen,
+        "{{.Rep.InputPath}}": html.escape(rep["input_path"]),
+        "{{.Rep.InputKind}}": html.escape(rep["input_kind"]),
+        "{{.Rep.Summary.Checks}}": str(s["checks"]),
+        "{{.Rep.Summary.Objects}}": str(s["objects_evaluated"]),
+        "{{.Rep.Summary.Pass}}": str(s["pass"]),
+        "{{.Rep.Summary.Fail}}": str(s["fail"]),
+        "{{.Rep.Summary.Notes}}": str(s["notes"]),
+        "{{.Payload}}": payload,
+    }
+    for k, v in subs.items():
+        tpl = tpl.replace(k, v)
+    # Go's html/template strips // comments from the interactive <script>
+    # block when rendering; replicate so output matches the binary's
+    # byte-for-byte. Safe for this template: no JS string contains "//"
+    # (guarded in VENDORED.md).
+    head, sep, js = tpl.rpartition("<script>\n")
+    if sep:
+        tpl = head + sep + re.sub(r"//[^\n]*", "", js)
+    if "{{" in tpl:
+        die("template.html contains directives this script doesn't know — "
+            "it has drifted from the vendored version; re-vendor both "
+            "template.html and this renderer together (see VENDORED.md).")
+    # newline="" prevents \n -> \r\n translation on Windows, keeping the
+    # output byte-identical to the Go renderer's.
+    with open(out_path, "w", encoding="utf-8", newline="") as f:
+        f.write(tpl)
+    print(f"      wrote {out_path}")
+
+
+def render_csv(rep, out_path):
+    with open(out_path, "w", encoding="utf-8", newline="") as fh:
+        # \n terminator matches the Go csv writer byte-for-byte.
+        cw = csv.writer(fh, lineterminator="\n")
+        cw.writerow(["slug", "title", "severity", "verdict", "section",
+                     "feature", "object", "location", "message", "references"])
+        for f in rep["findings"]:
+            cw.writerow([f["slug"], f["title"], f["severity"], f["verdict"],
+                         f["object"]["section"], f["object"]["feature"],
+                         f["object"]["name"], f["object"]["location"],
+                         f.get("message", ""),
+                         " ".join(f.get("references") or [])])
+    print(f"      wrote {out_path}")
+
+
 # -------------------------------------------------------------------- cli ---
-
-
-def render(bpa_bin, report_json, out_dir, formats):
-    cmd = [bpa_bin, "render", report_json, "--out", out_dir,
-           "--format", formats]
-    r = subprocess.run(cmd, text=True, encoding="utf-8")
-    if r.returncode != 0:
-        die(f"'{bpa_bin} render' failed (exit {r.returncode})")
 
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Hosted posture (BPA) API driver with open-pan-bpa "
-                    "presentation. Not an official Palo Alto Networks product.")
+        description="Standalone client for Palo Alto Networks' official "
+                    "hosted BPA (posture) API, with open-pan-bpa-format "
+                    "output. Not an official Palo Alto Networks product.")
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--tsf", help="tech support file (.tgz/.tar.gz)")
     src.add_argument("--config", help="bare running-config XML")
     src.add_argument("--report", help="existing API report JSON "
                                       "(offline: convert + render only)")
     ap.add_argument("--out", default=".", help="output directory")
-    ap.add_argument("--format", default="html,csv",
-                    help="render formats: html,csv,json (default html,csv)")
+    ap.add_argument("--format", default="html,csv,json",
+                    help="outputs: html,csv,json (default all three)")
     ap.add_argument("--hostname", default="",
                     help="hostname for the report (auto-detected from config)")
-    ap.add_argument("--bpa-bin", default="bpa",
-                    help="path to the open-pan-bpa binary")
+    ap.add_argument("--catalog", default="",
+                    help="path to catalog.json (default: next to this script)")
+    ap.add_argument("--template", default="",
+                    help="path to template.html (default: next to this script)")
     ap.add_argument("--keep-api-json", action="store_true",
                     help="keep the raw API report JSON next to the outputs")
     ap.add_argument("--no-corrections", action="store_true",
@@ -464,7 +576,12 @@ def main():
     args = ap.parse_args()
 
     os.makedirs(args.out, exist_ok=True)
-    catalog = load_catalog(args.bpa_bin)
+    template_path = args.template or os.path.join(SCRIPT_DIR, "template.html")
+    formats = {x.strip() for x in args.format.split(",") if x.strip()}
+    if "html" in formats and not os.path.exists(template_path):
+        die(f"template.html not found at {template_path} — it ships next to "
+            "this script (vendored from open-pan-bpa; see VENDORED.md).")
+    catalog = load_catalog(args.catalog)
 
     with tempfile.TemporaryDirectory() as workdir:
         hostname = args.hostname
@@ -495,16 +612,20 @@ def main():
 
         rep = convert(api, catalog, hostname, api_json_path,
                       corrections=not args.no_corrections)
-        converted = os.path.join(
-            args.out, f"bpa-{re.sub(r'[^A-Za-z0-9._-]', '-', rep['hostname'])}.json")
-        with open(converted, "w", encoding="utf-8") as f:
-            json.dump(rep, f, indent=2)
-        print(f"      wrote {converted}")
-
-        formats = ",".join(x for x in args.format.split(",")
-                           if x.strip() and x.strip() != "json")
-        if formats:
-            render(args.bpa_bin, converted, args.out, formats)
+        base = os.path.join(
+            args.out, "bpa-" + re.sub(r"[^A-Za-z0-9._-]", "-", rep["hostname"]))
+        if "json" in formats:
+            with open(base + ".json", "w", encoding="utf-8") as f:
+                json.dump(rep, f, indent=2)
+            print(f"      wrote {base}.json")
+        if "html" in formats:
+            render_html(rep, template_path, base + ".html")
+        if "csv" in formats:
+            render_csv(rep, base + ".csv")
+        s = rep["summary"]
+        print(f"{rep['hostname']}: {s['checks']} checks over "
+              f"{s['objects_evaluated']} objects — {s['pass']} pass / "
+              f"{s['fail']} fail / {s['notes']} notes")
 
 
 if __name__ == "__main__":

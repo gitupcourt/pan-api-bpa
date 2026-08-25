@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>open-pan-bpa — {{.Rep.Hostname}}</title>
+<style>
+:root{--bg:#f5f7fa;--card:#fff;--ink:#1c2733;--mut:#68778a;--line:#e3e8ee;
+  --crit:#c0392b;--high:#d35400;--warn:#b7950b;--info:#2471a3;--pass:#1e8449;--note:#7d3c98;--chipbg:#eef2f6}
+@media (prefers-color-scheme: dark){:root{--bg:#12181f;--card:#1b232d;--ink:#e6edf3;--mut:#8b98a7;--line:#2c3743;--chipbg:#232e3a}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.5 system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);padding:24px}
+h1{font-size:20px}h2{font-size:15px;margin:24px 0 8px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center}
+.card .n{font-size:26px;font-weight:700}.card .l{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--line);font-size:12px;color:var(--mut);white-space:nowrap}
+td{padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.sev,.verdict{font-weight:600;text-transform:capitalize;white-space:nowrap}
+.sev-critical{color:var(--crit)}.sev-high{color:var(--high)}.sev-warning{color:var(--warn)}.sev-informational{color:var(--info)}
+.v-pass{color:var(--pass)}.v-fail{color:var(--crit)}.v-note{color:var(--note)}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.refs{white-space:nowrap}.refs a{color:var(--info);font-size:11px;text-decoration:none;margin-right:4px}.refs a:hover{text-decoration:underline}
+.foot{margin-top:28px;color:var(--mut);font-size:12px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.controls input[type=search]{flex:1;min-width:220px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:14px}
+.controls select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:13px;max-width:280px}
+.chip{border:1px solid var(--line);background:var(--chipbg);color:var(--mut);border-radius:16px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;user-select:none}
+.chip.on{background:var(--card);color:var(--ink);border-color:currentColor}
+.chip.on.c-fail{color:var(--crit)}.chip.on.c-note{color:var(--note)}.chip.on.c-pass{color:var(--pass)}
+.chip.on.c-critical{color:var(--crit)}.chip.on.c-high{color:var(--high)}.chip.on.c-warning{color:var(--warn)}.chip.on.c-informational{color:var(--info)}
+.count{color:var(--mut);font-size:12px;margin-left:auto;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--chipbg);border:1px solid var(--line);border-radius:16px;padding:4px 10px;font-size:12px}
+.pill b{font-weight:600}.pill .x{cursor:pointer;color:var(--mut);font-weight:700}.pill .x:hover{color:var(--crit)}
+tr.clickable{cursor:pointer}tr.clickable:hover td{background:var(--chipbg)}
+tr.grouphdr td{background:var(--chipbg);font-weight:700;font-size:12px;border-top:2px solid var(--line)}
+tr.grouphdr .gcount{color:var(--mut);font-weight:400;margin-left:8px}
+#more{display:none;margin:12px auto;padding:8px 20px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:13px;cursor:pointer}
+#more:hover{background:var(--chipbg)}
+.hint{color:var(--mut);font-size:12px;margin:6px 0}
+#catnav{margin:18px 0 4px;border-bottom:2px solid var(--line);padding-bottom:10px}
+.chip.cat{font-size:13px;padding:6px 16px;text-transform:capitalize}
+</style>
+</head>
+<body>
+<h1>Best Practice Assessment — {{.Rep.Hostname}}</h1>
+<div class="sub">open-pan-bpa {{.Rep.ToolVersion}} · schema {{.Rep.SchemaVersion}} · generated {{.Rep.GeneratedAt.Format "2006-01-02 15:04 UTC"}} · input: {{.Rep.InputPath}} ({{.Rep.InputKind}})<br>
+<strong>Not an official Palo Alto Networks product.</strong> Results are advisory.</div>
+
+<div class="cards">
+  <div class="card"><div class="n">{{.Rep.Summary.Checks}}</div><div class="l">Checks</div></div>
+  <div class="card"><div class="n">{{.Rep.Summary.Objects}}</div><div class="l">Objects</div></div>
+  <div class="card"><div class="n v-pass">{{.Rep.Summary.Pass}}</div><div class="l">Pass</div></div>
+  <div class="card"><div class="n v-fail">{{.Rep.Summary.Fail}}</div><div class="l">Fail</div></div>
+  <div class="card"><div class="n v-note">{{.Rep.Summary.Notes}}</div><div class="l">Notes</div></div>
+</div>
+
+<noscript><p class="hint"><strong>This report requires JavaScript</strong> (self-contained — nothing is loaded or sent anywhere). Use the JSON or CSV output for scripted review.</p></noscript>
+
+<div class="controls" id="catnav"></div>
+
+<div id="bylocation-section" hidden>
+<h2>Where to look</h2>
+<p class="hint">Locations ranked by severity of failures. Click a row to focus the findings below on it.</p>
+<div class="wrap"><table id="bylocation">
+<thead><tr><th>Location</th><th>Critical</th><th>High</th><th>Warning</th><th>Info</th><th>Notes</th><th>Pass</th></tr></thead>
+<tbody></tbody>
+</table></div>
+</div>
+
+<h2>Results by check</h2>
+<p class="hint">Click a row to focus the findings below on that check.</p>
+<div class="wrap"><table id="bycheck">
+<thead><tr><th>Check</th><th>Severity</th><th>Pass</th><th>Fail</th><th>Notes</th></tr></thead>
+<tbody></tbody>
+</table></div>
+
+<h2>Findings</h2>
+<div class="controls">
+  <input type="search" id="q" placeholder="Search check, object, zone, rule name, message…" autocomplete="off">
+  <span class="chip c-fail on" data-kind="verdict" data-val="0">fail</span>
+  <span class="chip c-note on" data-kind="verdict" data-val="1">note</span>
+  <span class="chip c-pass" data-kind="verdict" data-val="2">pass</span>
+  <span class="chip c-critical on" data-kind="severity" data-val="0">critical</span>
+  <span class="chip c-high on" data-kind="severity" data-val="1">high</span>
+  <span class="chip c-warning on" data-kind="severity" data-val="2">warning</span>
+  <span class="chip c-informational on" data-kind="severity" data-val="3">informational</span>
+</div>
+<div class="controls">
+  <label class="hint" for="group">Group by</label>
+  <select id="group">
+    <option value="none">nothing</option>
+    <option value="loc">location</option>
+    <option value="check">check</option>
+  </select>
+  <span id="pills"></span>
+  <span class="count" id="count"></span>
+</div>
+<div class="wrap"><table id="findings">
+<thead><tr><th>Verdict</th><th>Severity</th><th>Check</th><th>Object</th><th>Location</th><th>Detail</th></tr></thead>
+<tbody></tbody>
+</table></div>
+<button id="more" type="button"></button>
+
+<div class="foot">open-pan-bpa is an independent community tool, not affiliated with or endorsed by Palo Alto Networks, Inc. This report never leaves this machine.<br>
+Best-practice criteria are implemented from Palo Alto Networks' publicly available documentation (<a href="https://docs.paloaltonetworks.com/best-practices" target="_blank" rel="noopener noreferrer">docs.paloaltonetworks.com</a>); the [doc N] links on each check cite the specific pages.</div>
+
+<script id="data" type="application/json">{{.Payload}}</script>
+<script>
+(function () {
+  'use strict';
+  var DATA = JSON.parse(document.getElementById('data').textContent);
+  var CHECKS = DATA.checks, LOCS = DATA.locations, F = DATA.findings;
+  // Finding tuple layout: [checkIdx, verdict, severity, locIdx, feature, name, message]
+  var V_NAMES = ['fail', 'note', 'pass'];
+  var S_NAMES = ['critical', 'high', 'warning', 'informational'];
+  var CHUNK = 500;
+
+  var state = {
+    verdicts: {0: true, 1: true, 2: false},
+    sevs: {0: true, 1: true, 2: true, 3: true},
+    q: '',
+    cat: 'all', // section filter: policies | objects | network | device
+    loc: -1,   // -1 = all
+    check: -1, // -1 = all
+    group: 'none',
+    limit: CHUNK
+  };
+
+  function inCat(i) {
+    return state.cat === 'all' || CHECKS[F[i][0]].sec === state.cat;
+  }
+
+  // ---- precomputed orders -------------------------------------------------
+  function triageRank(i) { // fails first, by severity, then notes, then passes
+    var f = F[i];
+    return f[1] * 8 + f[2];
+  }
+  var baseOrder = F.map(function (_, i) { return i; });
+  baseOrder.sort(function (a, b) { return triageRank(a) - triageRank(b) || a - b; });
+  var orders = {none: baseOrder, loc: null, check: null};
+  function orderFor(group) {
+    if (orders[group]) { return orders[group]; }
+    var key = group === 'loc' ? 3 : 0;
+    var o = baseOrder.slice();
+    o.sort(function (a, b) { return F[a][key] - F[b][key] || triageRank(a) - triageRank(b) || a - b; });
+    orders[group] = o;
+    return o;
+  }
+
+  var searchBlob = null; // built lazily on first search
+  function blob(i) {
+    var f = F[i], c = CHECKS[f[0]];
+    return (c.title + ' ' + c.slug + ' ' + f[4] + ' ' + f[5] + ' ' + LOCS[f[3]] + ' ' + f[6]).toLowerCase();
+  }
+
+  // ---- rendering helpers --------------------------------------------------
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) { e.className = cls; }
+    if (text !== undefined) { e.textContent = text; }
+    return e;
+  }
+  function refsSpan(c) {
+    var s = el('span', 'refs');
+    (c.refs || []).forEach(function (u, i) {
+      var a = el('a', null, '[doc ' + (i + 1) + ']');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.title = u;
+      s.appendChild(a);
+    });
+    return s;
+  }
+
+  // ---- category nav -------------------------------------------------------
+  // Mirrors the PAN-OS UI's top-level navigation. Selecting a category
+  // filters every table on the page.
+  var CAT_ORDER = ['policies', 'objects', 'network', 'device'];
+  var cats = CAT_ORDER.filter(function (c) {
+    return CHECKS.some(function (k) { return k.sec === c; });
+  });
+  CHECKS.forEach(function (k) {
+    if (k.sec && cats.indexOf(k.sec) === -1) { cats.push(k.sec); }
+  });
+  var catnav = document.getElementById('catnav');
+  ['all'].concat(cats).forEach(function (c) {
+    var chip = el('span', 'chip cat' + (c === 'all' ? ' on' : ''), c);
+    chip.dataset.cat = c;
+    chip.addEventListener('click', function () {
+      if (state.cat === c) { return; }
+      state.cat = c;
+      catnav.querySelectorAll('.chip').forEach(function (x) {
+        x.classList.toggle('on', x.dataset.cat === c);
+      });
+      // A check/location focus from another category would over-filter.
+      state.check = -1;
+      renderLocs();
+      renderChecks();
+      apply();
+    });
+    catnav.appendChild(chip);
+  });
+
+  // ---- by-location table --------------------------------------------------
+  function renderLocs() {
+    var locStats = LOCS.map(function (name, i) {
+      return {i: i, name: name, sev: [0, 0, 0, 0], notes: 0, pass: 0};
+    });
+    F.forEach(function (f, i) {
+      if (!inCat(i)) { return; }
+      var s = locStats[f[3]];
+      if (f[1] === 0) { s.sev[f[2]]++; } else if (f[1] === 1) { s.notes++; } else { s.pass++; }
+    });
+    locStats = locStats.filter(function (s) {
+      return s.sev[0] + s.sev[1] + s.sev[2] + s.sev[3] + s.notes + s.pass > 0;
+    });
+    locStats.sort(function (a, b) {
+      for (var k = 0; k < 4; k++) { if (a.sev[k] !== b.sev[k]) { return b.sev[k] - a.sev[k]; } }
+      return b.notes - a.notes;
+    });
+    document.getElementById('bylocation-section').hidden = LOCS.length < 2;
+    var ltb = document.querySelector('#bylocation tbody');
+    ltb.textContent = '';
+    locStats.forEach(function (s) {
+      var tr = el('tr', 'clickable');
+      tr.appendChild(el('td', 'mono', s.name || '—'));
+      S_NAMES.forEach(function (n, k) {
+        tr.appendChild(el('td', s.sev[k] ? 'sev-' + n : null, String(s.sev[k])));
+      });
+      tr.appendChild(el('td', s.notes ? 'v-note' : null, String(s.notes)));
+      tr.appendChild(el('td', 'v-pass', String(s.pass)));
+      tr.addEventListener('click', function () { setFilter('loc', s.i); });
+      ltb.appendChild(tr);
+    });
+  }
+  renderLocs();
+
+  // ---- by-check table -----------------------------------------------------
+  function renderChecks() {
+    var ctb = document.querySelector('#bycheck tbody');
+    ctb.textContent = '';
+    CHECKS.forEach(function (c, i) {
+      if (state.cat !== 'all' && c.sec !== state.cat) { return; }
+      var tr = el('tr', 'clickable');
+      var td = el('td', null, c.title);
+      var mono = el('div', 'mono', c.slug + ' ');
+      mono.appendChild(refsSpan(c));
+      td.appendChild(mono);
+      tr.appendChild(td);
+      tr.appendChild(el('td', 'sev sev-' + S_NAMES[c.sev], S_NAMES[c.sev]));
+      tr.appendChild(el('td', 'v-pass', String(c.pass)));
+      tr.appendChild(el('td', 'v-fail', String(c.fail)));
+      tr.appendChild(el('td', 'v-note', String(c.notes)));
+      tr.addEventListener('click', function () { setFilter('check', i); });
+      ctb.appendChild(tr);
+    });
+  }
+  renderChecks();
+
+  // ---- findings table -----------------------------------------------------
+  var ftb = document.querySelector('#findings tbody');
+  var count = document.getElementById('count');
+  var more = document.getElementById('more');
+  var pills = document.getElementById('pills');
+  var matches = [];
+
+  function match(i) {
+    var f = F[i];
+    if (!inCat(i)) { return false; }
+    if (!state.verdicts[f[1]]) { return false; }
+    if (f[1] !== 1 && !state.sevs[f[2]]) { return false; } // notes bypass severity
+    if (state.loc >= 0 && f[3] !== state.loc) { return false; }
+    if (state.check >= 0 && f[0] !== state.check) { return false; }
+    if (state.q) {
+      if (!searchBlob) { searchBlob = F.map(function (_, j) { return blob(j); }); }
+      if (searchBlob[i].indexOf(state.q) === -1) { return false; }
+    }
+    return true;
+  }
+
+  function row(i) {
+    var f = F[i], c = CHECKS[f[0]];
+    var tr = el('tr');
+    tr.appendChild(el('td', 'verdict v-' + V_NAMES[f[1]], V_NAMES[f[1]]));
+    tr.appendChild(el('td', 'sev sev-' + S_NAMES[f[2]], S_NAMES[f[2]]));
+    tr.appendChild(el('td', null, c.title));
+    tr.appendChild(el('td', 'mono', f[4] + (f[5] ? ' / ' + f[5] : '')));
+    tr.appendChild(el('td', null, LOCS[f[3]]));
+    var td = el('td', null, f[6] ? f[6] + ' ' : '');
+    if (f[1] !== 2) { td.appendChild(refsSpan(c)); }
+    tr.appendChild(td);
+    return tr;
+  }
+
+  function groupLabel(i) {
+    var f = F[i];
+    return state.group === 'loc' ? (LOCS[f[3]] || '—') : CHECKS[f[0]].title;
+  }
+
+  function render() {
+    ftb.textContent = '';
+    var frag = document.createDocumentFragment();
+    var shown = 0, lastGroup = null, groupCountCell = null, groupN = 0;
+    for (var k = 0; k < matches.length && shown < state.limit; k++) {
+      var i = matches[k];
+      if (state.group !== 'none') {
+        var g = groupLabel(i);
+        if (g !== lastGroup) {
+          if (groupCountCell) { groupCountCell.textContent = groupN + ' shown'; }
+          lastGroup = g; groupN = 0;
+          var htr = el('tr', 'grouphdr');
+          var htd = el('td', null, g);
+          htd.colSpan = 6;
+          var gc = el('span', 'gcount', '');
+          htd.appendChild(gc);
+          groupCountCell = gc;
+          htr.appendChild(htd);
+          frag.appendChild(htr);
+        }
+        groupN++;
+      }
+      frag.appendChild(row(i));
+      shown++;
+    }
+    if (groupCountCell) { groupCountCell.textContent = groupN + ' shown'; }
+    ftb.appendChild(frag);
+    count.textContent = (matches.length > shown ? shown + ' of ' : '') + matches.length + ' / ' + F.length + ' findings';
+    more.style.display = matches.length > shown ? 'block' : 'none';
+    more.textContent = 'Show ' + Math.min(CHUNK, matches.length - shown) + ' more (' + (matches.length - shown) + ' remaining)';
+  }
+
+  function apply() {
+    var order = orderFor(state.group);
+    matches = order.filter(match);
+    state.limit = CHUNK;
+    renderPills();
+    render();
+  }
+
+  function renderPills() {
+    pills.textContent = '';
+    [['loc', state.loc >= 0 ? (LOCS[state.loc] || '—') : null, 'location'],
+     ['check', state.check >= 0 ? CHECKS[state.check].title : null, 'check']
+    ].forEach(function (p) {
+      if (p[1] === null) { return; }
+      var s = el('span', 'pill');
+      s.appendChild(el('span', null, p[2] + ': '));
+      s.appendChild(el('b', null, p[1]));
+      var x = el('span', 'x', '✕');
+      x.addEventListener('click', function () { setFilter(p[0], -1); });
+      s.appendChild(x);
+      pills.appendChild(s);
+    });
+  }
+
+  function setFilter(kind, v) {
+    // Clicking a focus target REPLACES the previous focus rather than
+    // stacking on top of it — stacked loc+check+search filters quickly
+    // over-filter down to nothing.
+    if (v >= 0) {
+      state.loc = -1;
+      state.check = -1;
+      state.q = '';
+      q.value = '';
+    }
+    state[kind] = v;
+    apply();
+    document.getElementById('findings').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
+
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      c.classList.toggle('on');
+      var set = c.dataset.kind === 'verdict' ? state.verdicts : state.sevs;
+      set[Number(c.dataset.val)] = c.classList.contains('on');
+      apply();
+    });
+  });
+  var q = document.getElementById('q'), qTimer = null;
+  q.addEventListener('input', function () {
+    clearTimeout(qTimer);
+    qTimer = setTimeout(function () { state.q = q.value.trim().toLowerCase(); apply(); }, 150);
+  });
+  document.getElementById('group').addEventListener('change', function (e) {
+    state.group = e.target.value;
+    apply();
+  });
+  more.addEventListener('click', function () { state.limit += CHUNK; render(); });
+
+  apply();
+})();
+</script>
+</body>
+</html>
