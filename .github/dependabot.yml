@@ -1,0 +1,20 @@
+version: 2
+
+# Dependabot for pan-api-bpa: the single runtime dependency (requests, via
+# requirements.txt) and the security workflow's actions. Alerts + security
+# updates are enabled at the repo level; this file governs scheduled
+# version-update PRs.
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
