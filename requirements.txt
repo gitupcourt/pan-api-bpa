@@ -1,0 +1,4 @@
+# The tool's one third-party dependency. --report mode is stdlib-only and
+# does not need this. Floor pin so public consumers get a maintained
+# version and Dependabot has a manifest to track.
+requests>=2.32

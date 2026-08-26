@@ -1,0 +1,62 @@
+name: security
+
+# AppSec CI security gate for pan-api-bpa.
+#
+# The primary risk in this repo is the same as its sibling engine's: a
+# firewall config, tech-support file, or API report getting committed.
+# gitleaks is BLOCKING and is a required check on main. The workflow
+# pattern (commit-range scoping, env-based event injection hygiene,
+# container image at :latest for ruleset freshness with the scanned
+# target pinned by checkout SHA) mirrors open-pan-bpa's gate.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  secrets:
+    name: gitleaks (secret scan)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # full history so the --log-opts range resolves
+
+      - name: gitleaks (commit-range scoped)
+        env:
+          # Pass event fields via env — never interpolate ${{ }} directly
+          # into the script body — so a crafted ref/SHA can't break out of
+          # the shell (standard Actions script-injection hygiene).
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          scan() {
+            docker run --rm -v "${PWD}:/repo" zricethezav/gitleaks:latest \
+              git /repo --redact --no-banner --verbose \
+              --log-opts="$1"
+          }
+          if [ "${EVENT_NAME}" = "pull_request" ]; then
+            echo "Scanning PR commit range: ${PR_BASE}..${PR_HEAD}"
+            scan "${PR_BASE}..${PR_HEAD}"
+          elif echo "${PUSH_BEFORE}" | grep -qE '^0+$'; then
+            echo "No before-SHA (first push) — scanning HEAD commit only"
+            scan "-1 ${PUSH_HEAD}"
+          else
+            echo "Scanning pushed range: ${PUSH_BEFORE}..${PUSH_HEAD}"
+            scan "${PUSH_BEFORE}..${PUSH_HEAD}"
+          fi
