@@ -14,6 +14,11 @@ on:
     branches: [main]
   push:
     branches: [main]
+  schedule:
+    # Weekly, Monday 08:00 UTC — matches pan-ops-console's cadence. Catches a
+    # CVE disclosed against an already-pinned, unchanged dependency (requests
+    # et al.) instead of waiting on Dependabot's own version-bump PR.
+    - cron: "0 8 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -60,3 +65,27 @@ jobs:
             echo "Scanning pushed range: ${PUSH_BEFORE}..${PUSH_HEAD}"
             scan "${PUSH_BEFORE}..${PUSH_HEAD}"
           fi
+
+  # ===================================================================
+  # DEPENDENCY AUDIT — Python (pip-audit). INFORMATIONAL, same ratchet
+  # posture pan-ops-console's security.yml used in its own onboarding:
+  # runs on every trigger including the new schedule above, surfaces
+  # findings in the job summary, but `|| true`-guarded so it can't fail
+  # the workflow until a baseline-triage pass promotes it to blocking.
+  # ===================================================================
+  deps-python:
+    name: pip-audit [informational]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: pip-audit against requirements.txt
+        run: |
+          python -m pip install --upgrade pip pip-audit
+          echo "## pip-audit — requirements.txt" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          pip-audit -r requirements.txt --desc 2>&1 | tee /tmp/pip-audit.txt || true
+          cat /tmp/pip-audit.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
