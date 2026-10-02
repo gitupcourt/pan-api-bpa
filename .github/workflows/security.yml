@@ -14,6 +14,11 @@ on:
     branches: [main]
   push:
     branches: [main]
+  schedule:
+    # Weekly, Monday 08:00 UTC — matches pan-ops-console's cadence. Catches a
+    # CVE disclosed against an already-pinned, unchanged dependency (requests
+    # et al.) instead of waiting on Dependabot's own version-bump PR.
+    - cron: "0 8 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -60,3 +65,31 @@ jobs:
             echo "Scanning pushed range: ${PUSH_BEFORE}..${PUSH_HEAD}"
             scan "${PUSH_BEFORE}..${PUSH_HEAD}"
           fi
+
+  # ===================================================================
+  # DEPENDENCY AUDIT — Python (pip-audit). FAILS on a finding, but is
+  # deliberately NOT a required check on main: with one dependency and a
+  # clean baseline there is nothing to ratchet, and a red job (or a failed
+  # scheduled run, which notifies) is the signal we want. Keeping it out of
+  # the required set means an upstream advisory with no fixed release yet
+  # cannot block unrelated merges.
+  # ===================================================================
+  deps-python:
+    name: pip-audit (dependency audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: pip-audit against requirements.txt
+        run: |
+          set -o pipefail
+          python -m pip install --upgrade pip pip-audit
+          echo "## pip-audit — requirements.txt" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          rc=0
+          pip-audit -r requirements.txt --desc 2>&1 | tee /tmp/pip-audit.txt || rc=$?
+          cat /tmp/pip-audit.txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit "$rc"
