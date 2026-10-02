@@ -9,6 +9,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # requirements.txt carries a floor (`>=`), not an exact pin. Only raise
+    # it when the range would otherwise exclude a release (or for a
+    # security update) — not on every upstream release.
+    versioning-strategy: "increase-if-necessary"
     commit-message:
       prefix: "deps"
 
